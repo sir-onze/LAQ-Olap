@@ -1,0 +1,17 @@
+sig Entitie {
+	relation: Attribute
+}
+
+abstract sig Attribute { }
+
+sig Dimension extends Attribute {
+
+}
+
+sig Measure extends Attribute {
+
+}
+
+
+
+run {}
