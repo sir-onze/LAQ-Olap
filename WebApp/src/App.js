@@ -9,6 +9,7 @@ function App() {
   const [arrayRela=[],hookRela]= React.useState([]) ;
   var table = "" ;
   var rela = "";
+  /** Se que mando de piça */
   const dragUrl = React.useRef();
   const stageRef = React.useRef();
   const [images, setImages] = React.useState([])
