@@ -1,19 +1,19 @@
 sig Node {}
 
 sig Arrow {
-	name : one Name,
+	//name : one Name, ? is it needed
 	source : one Node,
 	target : one Node,
-	props : set Prop
+	//props : set Prop ? is it needed, can we do it in Alloy
 }
+
+sig Entity extends Node {}
 
 sig Type extends Node {}
 
 sig Var extends Type {}
 
 sig CType extends Type {}
-
-sig Entity extends Node {}
 
 sig Prop {}
 
@@ -24,5 +24,4 @@ sig Meas extends Arrow {}
 sig Name {}
 
 
-
-run { some Arrow}
+run {}
