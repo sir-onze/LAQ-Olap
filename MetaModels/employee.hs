@@ -2,10 +2,10 @@
 import Cp
 import RelCalc
 ---INSTANCE---
-integers=[-8, -7, -6, -5, -4, -3, -2, -1, , 1, 2, 3, 4, 5, 6, 7]
---univ=[-1, -2, -3, -4, -5, -6, -7, -8, , 1, 2, 3, 4, 5, 6, 7, "B", "C", "D", "K", "N", "One", "e", "e_branch", "e_country", "e_job", "e_name", "j", "j_code", "j_desc", "j_salary", "model_Arrow"]
-int=[-1, -2, -3, -4, -5, -6, -7, -8, , 1, 2, 3, 4, 5, 6, 7]
-seq_int=[, 1, 2, 3, 4, 5, 6]
+integers=[-8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7]
+--univ=[-1, -2, -3, -4, -5, -6, -7, -8, 0, 1, 2, 3, 4, 5, 6, 7, "B", "C", "D", "K", "N", "One", "e", "e_branch", "e_country", "e_job", "e_name", "j", "j_code", "j_desc", "j_salary", "model_Arrow"]
+int=[-1, -2, -3, -4, -5, -6, -7, -8, 0, 1, 2, 3, 4, 5, 6, 7]
+seq_int=[0, 1, 2, 3, 4, 5, 6]
 string=[]
 none=[]
 model_Node=["B", "C", "D", "K", "N", "One", "e", "j"]
