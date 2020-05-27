@@ -22,11 +22,13 @@ function App() {
   }
 
   const options = {
-    layout: {
-      hierarchical: false
-    },
+    physics: true,
     edges: {
-      color: "#000000"
+      color: "#000000",
+      smooth: {
+        type: "continuous",
+        roundness: 0
+      }
     }
   };
 
@@ -70,7 +72,7 @@ function App() {
             id=parseInt(localStorage.getItem("id"),10)+1
         }
         //console.log("adicionado pelo botao "+e.target.name + "added " + label)
-        var aux_table = {id, label,color: "#e04141",attribute_aux}
+        var aux_table = {id, label,color: "#e04141",attribute_aux,physics:"false"}
         localStorage.setItem("id",id)
         console.log(arrayTable[0])
         var graph_aux=arrayTable[0]
@@ -359,7 +361,7 @@ function App() {
                                 )}
                             />
                             </div>
-                              :   
+                              : 
                               <p><b>Measures</b>: No information</p>
                             }
                             {
@@ -380,7 +382,6 @@ function App() {
                             :
                             <p><b>Dimensions</b>: No information</p>
                             }
-                          
                         </div>
                           :
                           <div>
