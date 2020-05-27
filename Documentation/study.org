@@ -1,0 +1,61 @@
+MonetDB - https://www.monetdb.org/Home
+Pipelined Query Execution - https://db.in.tum.de/~grust/teaching/ws0607/MMDBMS/DBMS-CPU-5.pdf
+Volcano - https://paperhub.s3.amazonaws.com/dace52a42c07f7f8348b08dc2b186061.pdf
+
+* MonetDB
+Column-store In-Memory database management system.
+Developed by Centrum Wiskunde & Informatica - Netherlands.
+
+** MIL -> Monet Interpreter Language
+First implementation.
+Uses *vertical partiotining*.
+- each column is stored in a *binary association table (BAT)*.
+
+
+** X100 -> new query processor (aims to improve MIL)
+Introduces the concept of *in-cache vectorized processing* that strikes a balance between the
+existing *column-at-a-time MIL* and the *tuple-at-a-time Volcano pipelining model*, avoiding
+their drawbacks:
+- intermediate result materialization (column-at-a-time)
+- large interpretation overhead (tuple-at-a-time)
+
+Introduces a variation of relation algebra - *X100*.
+Collums are fragmented vertically and compressed.
+These fragments are efficiently processed using a technique called *vectorized processing*
+  -> operates over small vertical chunks of data items in cache rather then single records.
+
+*** X100 Storage - ColumnBM (Buffer Manager)
+
+**** DSM (Decomposed Storage Model)
+ColumnBM vertically fragments tables on disk using DSM
+  -> saves bandwidth if queries scan a table without using all columns.
+Treats data chunks as immutable objects and stores modifications in the (in-memory) delta
+structures, periodically updating the chunks.
+
+During the scan, data from disk and delta structures are merged, providing the execution
+layer with a consistent state.
+
+**** Compression
+Introduces two novel techniques:
+- ultra lightweigth compression
+- into-cache decompression
+
+ColumnBM stores disk pages in a compressed form and decompresses them just before execution,
+on a per-vector granularity.
+
+(De)compression is performed on the boundary between CPU cache and main memory, rather than
+between main memory and disk.
+
+**** Cooperative Scans
+Reuses data already buffered by other queries.
+Disk accesses are scheduled to satify the largest possible number of "starving" queries.
+
+
+*** X100 Algebra primitives
+- *Scan*
+- *Select*
+- *Project*
+- *Join*
+- *Aggr* (aggregation)
+- *TopN*
+- *Order*
