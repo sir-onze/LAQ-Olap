@@ -1,9 +1,9 @@
-sig Node {
+abstract sig Node {
    name : one Label,
    color : one Color
 }
 
-sig Arrow {
+abstract sig Arrow {
    label : one Label,
    source : one Node,
    target : one Node,
@@ -11,8 +11,8 @@ sig Arrow {
 }
 
 fact{
-   ~name.name in iden -- injective
-   ~label.label in iden -- injective
+   name.~name in iden -- injective
+   label.~label in iden -- injective
    no name.~label 
 }
 
