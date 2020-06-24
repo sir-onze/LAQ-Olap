@@ -1,10 +1,8 @@
 import Graph from "react-graph-vis";
 import React from "react";
 import 'antd/dist/antd.css';
-import { Form, Input, Button, notification,Descriptions,Select, Layout, List,Divider} from 'antd';
-import { Card } from 'antd';
-import { Attribute } from "pixi.js";
-
+import { Form, Input, Button, notification,Select, Layout, List} from 'antd';
+import { Card, Divider} from 'antd';
 const { Option } = Select;
 const { Content} = Layout;
 
@@ -286,22 +284,22 @@ function App() {
 
   return(
       <div>
+        <div style={{overflowY: 'scroll',display:'flex',height:'51vh'}}>
         <table style={{width:'100%'}}>
             <tr>
                 <th style={{width:'50%'}}>
-                <Card>
+                <Card hoverable style={{borderColor:'#2274A5',marginTop:'1vh',marginLeft:'0.5vh'}}>
                   <h1>Creation</h1>
             <Form>
                 <Form.Item label="Entity name">
                 <Input name="table"
+                  style={{width:'25vh'}}
                   onChange={postHandler} placeholder="Input name" />
-                </Form.Item>
-                <Form.Item >
-                    <Button name = "Tablebutton" onClick={createTable} type="primary" style={{ width:'10vw'}}>Create Entity</Button>
+                   <Button name = "Tablebutton" onClick={createTable} type="primary" style={{ width:'10vw',marginLeft:'5vh',backgroundColor:'#000505',borderColor:'#000505'}}>Create Entity</Button>
                 </Form.Item>
             </Form>
            </Card>
-           <Card>
+           <Card hoverable style={{borderColor:'#2274A5',marginTop:'1vh',marginLeft:'0.5vh'}}>
             <h1>Operations</h1>
             {
                 localStorage.getItem("from") && localStorage.getItem("to")?
@@ -311,23 +309,22 @@ function App() {
             <Form>
                 <Form.Item label="Relation name">
                     <Input name="relation"
-                  onChange={postHandler1} placeholder="Relation name" />
-                </Form.Item>
-                <Form.Item >
-                    <Button name = "Measure" type="primary" onClick={createRelation} style={{width:'9vw',marginTop:'5vh'}}>Create Measure</Button>
-                    <Button name = "Dimension" type="primary" onClick={createRelation} style={{width:'10vw',marginTop:'5vh',marginLeft:'2vw'}}>Create Dimension</Button>
-                    <Button name = "RelationClearbutton" type="primary" onClick={clearRelation} style={{marginLeft:'2vw', width:'5vw'}}>Clear</Button>
+                     style={{width:'25vh'}}
+                     onChange={postHandler1} placeholder="Relation name" />
+                    <Button name = "Measure" type="primary" onClick={createRelation} style={{width:'9vw',marginTop:'5vh',marginLeft:'5vh',backgroundColor:'#000505',borderColor:'#000505'}}>Create Measure</Button>
+                    <Button name = "Dimension" type="primary" onClick={createRelation} style={{width:'10vw',marginTop:'5vh',marginLeft:'2vw',backgroundColor:'#000505',borderColor:'#000505'}}>Create Dimension</Button>
+                    <Button name = "RelationClearbutton" type="primary" onClick={clearRelation} style={{marginLeft:'2vw', width:'5vw',backgroundColor:'#000505',borderColor:'#000505'}}>Clear</Button>
                 </Form.Item>
             </Form>
             </Card>
-            <Card>
+            <Card hoverable style={{borderColor:'#2274A5',marginTop:'1vh',marginLeft:'0.5vh'}}>
             <h1>Tools</h1>
-            <Button name = "ClearAllbutton" type="primary" onClick={clearAll} style={{ width:'10vw'}}>Erase Schema</Button>
+            <Button name = "ClearAllbutton" type="primary" onClick={clearAll} style={{ width:'10vw',backgroundColor:'#000505',borderColor:'#000505'}}>Erase Schema</Button>
 
         </Card>
                 </th>
                 <th style={{width:'50%'}}>
-                <Card style={{ width: '50%',position:'absolute',marginTop:'-39.3vh'}}>
+                <Card hoverable style={{ width: '49.4%',overflowY: 'scroll',display:'flex',height:'49.5vh',position:'absolute',marginTop:'-39.8vh',borderColor:'#2274A5',marginLeft:'0.5vh'}}>
                         {
                           localStorage.getItem("from")?
                         <div>
@@ -399,6 +396,11 @@ function App() {
                 </th>
             </tr>
         </table>
+        
+        </div>
+        <div>
+        <Divider style={{backgroundColor:'#2274A5'}}/>
+        </div>
         {
             localStorage.getItem('tables') ?
             <Content
