@@ -46,4 +46,4 @@ fact {
 }
 
 // 7 arrows 2 entities 
-run {(some N:Node| some source.N and some target.N)} for 8
+run {} for 15

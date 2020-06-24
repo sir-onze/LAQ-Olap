@@ -1,10 +1,19 @@
-sig Node {}
+abstract sig Node {
+   name : one Label,
+   color : one Color
+}
 
-sig Arrow {
-	//name : one Name, ? is it needed
-	source : one Node,
-	target : one Node,
-	//props : set Prop ? is it needed, can we do it in Alloy
+abstract sig Arrow {
+   label : one Label,
+   source : one Node,
+   target : one Node,
+   //props : set Prop ? is it needed, can we do it in Alloy
+}
+
+fact{
+   name.~name in iden -- injective
+   label.~label in iden -- injective
+   no name.~label 
 }
 
 sig Entity extends Node {}
@@ -21,7 +30,6 @@ sig Dim extends Arrow {}
 
 sig Meas extends Arrow {}
 
-sig Name {}
-
+sig Label, Color {}
 
 run {}
