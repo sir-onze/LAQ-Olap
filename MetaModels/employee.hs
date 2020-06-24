@@ -1,4 +1,3 @@
-
 import Cp
 import RelCalc
 ---INSTANCE---
@@ -36,4 +35,3 @@ this_j_salary=["j_salary"]
 model_Prop=[]
 model_Name=[]
 skolem "N"=["K"]
-
