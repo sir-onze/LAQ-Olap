@@ -1,0 +1,193 @@
+#+STARTUP: inlineimages
+#+STARTUP: overview
+
+* MONETDB Internals
+
+[[http://sites.computer.org/debull/A12mar/monetdb.pdf]]
+[[https://www.monetdb.org/Documentation/MonetDBInternals/Overview][MonetDB Internals]]
+[[https://www.monetdb.org/Developers/SourceCompile][Source Compile]]
+
+** Redesign considerations.
+ Redesign of the MonetDB software driven by the need to reduce the effort to extend the system into novel directions and to reduce
+ the *Total Execution Cost (TEC)*.
+
+ *TEC*:
+  - API message handling                (*A*)
+  - Parsing and semantic analysis       (*P*)
+  - Optimization and plan generation    (*O*)
+  - Data access to the persistent store (*D*)
+  - Execution of the query terms        (*E*)
+  - Result delivery to the application  (*R*)
+
+ OLTP -> Online Transaction Processing -> expected most of the cost to be in (P,O)
+ OLAP -> Online Analytical Processing  -> expected most of the cost to be in (D,E,R)
+
+** Storage Model
+    - Represents relational tables using vertical fragmentation.
+    - Stores each column in a separate {(OID,value)} table,  called a *BAT (Binary Association Table)*
+    - Relies on a low-level relational algebra called the BAT algebra, which takes BATs and scalar values as input.
+    - The complete result is always stored in (intermediate) BATs, and the result of an SQL query is a collection of BATs.
+
+    - *BAT* is implemented as an ordinary C-array. OID maps to the index in the array.
+    - Persistent version of *BAT* is a *memory mapped file*.
+    - *O(1) positional database lookup mechanism* (MMU - memory management unit)
+
+** All (relational) operators exploit a small set of properties:
+    - seq       - the sequence base, a mapping from array index 0 into a OID value
+    - key       - the values in the column are unique
+    - nil       - there is at least one NIL value
+    - nonil     - it is unknown if there NIL values
+    - dense     - the numeric values in the column form a dense sequence
+    - sorted    - the column contains a sorted list for ordered domains
+    - revsorted - the column contains a reversed sorted list
+
+** Execution Model
+    - *MonetDB* kernel is an abstract machine, programmed in the *MonetDB Assemblee Language (MAL)*.
+    - Each relational algebra operator corresponds to a *MAL instruction* (zero degrees of freedom).
+    - Each *BAT algebra operator* maps to a simple *MAL instruction*.
+
+** Software Stack
+    Three software layers:
+    - *FRONT-END* *Query language parser and a heuristic, language - and data model - specific optimizer*. *OUTPUT* -> logical plan expressed in MAL.
+    - *BACK-END* *Collection of optimizer modules* -> assembled into an optimization pipeline
+    - *MAL interpreter* -> contains the library of highly optimized implementation of the binary relational algebra operators.
+
+* Binary Association Tables
+
+  [[./Pictures/BAT.png]]
+
+* MAL Reference (MonetDB Assembly Language)
+
+   - MAL program is considered a specification of intended computation and data flow behavior.
+   - Language syntax uses a functional style definition of actions and mark those that affect the flow explicitly.
+
+** Literals (follow the lexical conventions of C)
+
+    |------------------+------------------+---------------------------|
+    | *Hardwire Types* | *Temporal Types* | *IPv4 addresses and URLs* |
+    |------------------+------------------+---------------------------|
+    | bit (bit)        | date             | inet                      |
+    |------------------+------------------+---------------------------|
+    | bte (byte)       | daytime          | url                       |
+    |------------------+------------------+---------------------------|
+    | chr (char)       | time             | UUID                      |
+    |------------------+------------------+---------------------------|
+    | wrd (word)       | timestamp        | json                      |
+    |------------------+------------------+---------------------------|
+    | sht (short)      | -                | -                         |
+    |------------------+------------------+---------------------------|
+    | int (integer)    | -                | -                         |
+    |------------------+------------------+---------------------------|
+    | lng (long)       | -                | -                         |
+    |------------------+------------------+---------------------------|
+    | oid (object id)  | -                | -                         |
+    |------------------+------------------+---------------------------|
+    | flt (float)      | -                | -                         |
+    |------------------+------------------+---------------------------|
+    | dbl (double)     | -                | -                         |
+    |------------------+------------------+---------------------------|
+    | str (string)     | -                | -                         |
+    |------------------+------------------+---------------------------|
+
+** Variables
+
+    *User Defined* -> start with a letter
+    *Temporary*    -> start with X_ (generated internally by optimizers)
+
+** Instructions
+
+    *One liners*   -> easy to parse
+
+    [[./Pictures/instructions-ex.png]]
+
+** Type System
+
+    *Strongly typed language*
+
+    [[./Pictures/poly-ex.png]]
+
+    - Polymorphic given by "any".
+    - Type checker (intelligent type resolution).
+
+** Flow of Control
+
+   *For statement implementation:*
+   [[./Pictures/for-ex.png]]
+
+   *If statement implementation:*
+   [[./Pictures/if-ex.png]]
+
+** Exceptions
+
+   (*To explore.*)
+
+** Modules
+
+   (*Name Space Management. To explore.*)
+
+** Functions
+
+   *Function example*
+   [[./Pictures/fun-ex.png]]
+
+   *Side Effects*
+   - Functions can be pre-pended with the keyword unsafe.
+   - Designates that execution of the function may change the state of the database or sends information to the client.
+   - Unsafe functions are critical for the optimizers -> order of execution should be guaranteed.
+   - Functions that return *:void* -> unsafe by default.
+
+   *Inline Functions*
+   - Functions prepended with the keyword *inline* are a target for the optimizers to be inlined. -> reduce the function call overhead.
+
+** MAL Syntax
+
+   *Expressed in extended Backus–Naur form (EBNF)* [[https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form][Wiki]]
+
+   |--------------------------+---------------------------------|
+   | Alternative constructors | (vertical bar) grouped by ()    |
+   |--------------------------+---------------------------------|
+   | Repetition               | '+'-> at least once; '*'-> many |
+   |--------------------------+---------------------------------|
+   | Lexical tokens           | small capitals                  |
+   |--------------------------+---------------------------------|
+
+   [[./Pictures/syntax.png]]
+
+** MAL Interpreter
+
+** MAL Debugger
+
+** MAL Profiler
+
+** MAL Optimizers
+   *Triggered by experimentation and curiousity*
+
+*** Alias Removal
+*** Building Blocks -> there are examples for a user to build a Optimizer
+*** Coercions
+    Removes coercions that are not needed --> v:= calc.int(23);
+    (sloppy code-generator or function call resolution decision)
+
+*** Common Subexpressions
+
+    [[./Pictures/opt-common-subs-1.png]]              [[./Pictures/opt-common-subs-1+.png]]
+
+*** Constant Expression Evaluation
+
+    [[./Pictures/const-exps-eval-1.png]]              [[./Pictures/const-exps-eval-1+.png]]
+
+*** Cost Model
+*** Data Flow
+    Query executions without side effects can be rearranged.
+*** Garbage Collector
+*** Join Paths
+    Looks up the MAL query and "composes" multiple joins. *algebra.join -> algebra.joinPath*
+*** Landscape
+*** Lifespans
+*** Macro Processing
+*** Memoization
+*** Multiplex Functions
+*** Remove Actions
+*** Stack Reduction
+
+** MAL Modules
