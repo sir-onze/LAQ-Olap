@@ -1,7 +1,7 @@
 import Graph from "react-graph-vis";
 import React from "react";
 import 'antd/dist/antd.css';
-import { Form, Input, Button, notification,Select, Layout, List} from 'antd';
+import { Form, Input, Button, notification,Select, Layout, List,message} from 'antd';
 import { Card, Divider} from 'antd';
 const { Option } = Select;
 const { Content} = Layout;
@@ -30,6 +30,12 @@ function App() {
     }
   };
 
+
+  /** Função que trata dos cliques nos dropdowns */
+  function handleMenuClick(value) {
+    console.log(`selected ${value}`);
+    message.success("Selected " + value)
+  }
   /** Aqui estou a tratar os casos em que clicamos nos butoes */
   const events = {
     select: function(event) {
@@ -272,63 +278,108 @@ function App() {
     var attribute_aux =[]
     var attribute_aux1 =[]
     const children = [] 
-
+    var tables_aux = []
+      if(localStorage.getItem("selected_attributes")){
       attribute_aux1 = JSON.parse(localStorage.getItem("selected_attributes"))
       if( attribute_aux1){
         for (let i = 0; i < attribute_aux1.length; i++) {
             children.push(<Option key={attribute_aux1[i]}>{attribute_aux1[i]}</Option>);
           }
       }
+    }
     /** Parte relacionada com a visualização dos elementos selecionados*/
     const [consult=[],hookConsult]= React.useState([]) ;
 
   return(
       <div>
-        <div style={{overflowY: 'scroll',display:'flex',height:'51vh'}}>
+        <div style={{overflowY: 'scroll',display:'flex',height:'40vh'}}>
         <table style={{width:'100%'}}>
             <tr>
                 <th style={{width:'50%'}}>
                 <Card hoverable style={{borderColor:'#2274A5',marginTop:'1vh',marginLeft:'0.5vh'}}>
-                  <h1>Creation</h1>
+                  <h1>Schema Editor</h1>
             <Form>
-                <Form.Item label="Entity name">
+                <Form.Item>
                 <Input name="table"
                   style={{width:'25vh'}}
-                  onChange={postHandler} placeholder="Input name" />
-                   <Button name = "Tablebutton" onClick={createTable} type="primary" style={{ width:'10vw',marginLeft:'5vh',backgroundColor:'#000505',borderColor:'#000505'}}>Create Entity</Button>
+                  onChange={postHandler} placeholder="Input node name" />
+                   <Button name = "Tablebutton" onClick={createTable} type="primary" style={{ width:'7vw',marginLeft:'5vh',backgroundColor:'#000505',borderColor:'#000505'}}>Create</Button>
+                   <Button name = "Tablebutton" onClick={createTable} type="primary" style={{ width:'7vw',marginLeft:'5vh',backgroundColor:'#000505',borderColor:'#000505'}}>Edit</Button>
+                   <Button name = "Tablebutton" onClick={createTable} type="primary" style={{ width:'7vw',marginLeft:'5vh',backgroundColor:'#000505',borderColor:'#000505'}}>Delete</Button>
                 </Form.Item>
             </Form>
-           </Card>
-           <Card hoverable style={{borderColor:'#2274A5',marginTop:'1vh',marginLeft:'0.5vh'}}>
-            <h1>Operations</h1>
-            {
+            <Form>
+                <Form.Item>
+                    <Input name="relation"
+                     style={{width:'25vh'}}
+                     onChange={postHandler1} placeholder="Arrow name" />
+                    <Button name = "Measure" type="primary" onClick={createRelation} style={{width:'7vw',marginTop:'5vh',marginLeft:'5vh',backgroundColor:'#000505',borderColor:'#000505'}}>Create </Button> 
+                    <Button name = "Dimension" type="primary" onClick={createRelation} style={{width:'7vw',marginTop:'5vh',marginLeft:'5vh',backgroundColor:'#000505',borderColor:'#000505'}}>Edit</Button>
+                    <Button name = "RelationClearbutton" type="primary" onClick={clearRelation} style={{marginLeft:'5vh', width:'7vw',backgroundColor:'#000505',borderColor:'#000505'}}>Delete</Button>
+                </Form.Item>
+                <Form.Item>
+                  <Select
+                      showSearch
+                      style={{ width: 150, marginLeft:'5vh' }}
+                      placeholder="Source node"
+                      onChange={handleMenuClick}
+                    >
+                      {
+                        (arrayTable[0])!=null?
+                        arrayTable[0].nodes.map((item)=>{
+                              console.log(item.label)
+                              return(
+                                <Option value={item.label}>{item.label}</Option>)
+                            })
+                        :
+                        console.log("nada")
+                      }
+                  </Select>
+                  <Select
+                      showSearch
+                      style={{ width: 150, marginLeft:'5vh' }}
+                      placeholder="Destiny node"
+                      onChange={handleMenuClick}
+                    >
+                      {
+                        (arrayTable[0])!=null?
+                        arrayTable[0].nodes.map((item)=>{
+                              console.log(item.label)
+                              return(
+                                <Option value={item.label}>{item.label}</Option>)
+                            })
+                        :
+                        console.log("nada")
+                      }
+                  </Select>
+                   <Select
+                    showSearch
+                    style={{ width: 110, marginLeft:'5vh' }}
+                    placeholder="Type"
+                    onChange={handleMenuClick}
+                  >
+                    <Option value="Measure">Measure</Option>
+                    <Option value="Dimension">Dimension</Option>
+
+                </Select>
+                </Form.Item>
+                {
                 localStorage.getItem("from") && localStorage.getItem("to")?
                 <div></div>
                 : <p> Please select two nodes</p>
             }
-            <Form>
-                <Form.Item label="Relation name">
-                    <Input name="relation"
-                     style={{width:'25vh'}}
-                     onChange={postHandler1} placeholder="Relation name" />
-                    <Button name = "Measure" type="primary" onClick={createRelation} style={{width:'9vw',marginTop:'5vh',marginLeft:'5vh',backgroundColor:'#000505',borderColor:'#000505'}}>Create Measure</Button>
-                    <Button name = "Dimension" type="primary" onClick={createRelation} style={{width:'10vw',marginTop:'5vh',marginLeft:'2vw',backgroundColor:'#000505',borderColor:'#000505'}}>Create Dimension</Button>
-                    <Button name = "RelationClearbutton" type="primary" onClick={clearRelation} style={{marginLeft:'2vw', width:'5vw',backgroundColor:'#000505',borderColor:'#000505'}}>Clear</Button>
-                </Form.Item>
             </Form>
-            </Card>
-            <Card hoverable style={{borderColor:'#2274A5',marginTop:'1vh',marginLeft:'0.5vh'}}>
-            <h1>Tools</h1>
             <Button name = "ClearAllbutton" type="primary" onClick={clearAll} style={{ width:'10vw',backgroundColor:'#000505',borderColor:'#000505'}}>Erase Schema</Button>
+           </Card>
 
-        </Card>
                 </th>
                 <th style={{width:'50%'}}>
-                <Card hoverable style={{ width: '49.4%',overflowY: 'scroll',display:'flex',height:'49.5vh',position:'absolute',marginTop:'-39.8vh',borderColor:'#2274A5',marginLeft:'0.5vh'}}>
+                
                         {
                           localStorage.getItem("from")?
+                          <Card hoverable style={{ width: '89%', marginTop: '11.5vh', borderColor: '#2274A5', marginLeft: '0.5vh'}}>
                         <div>
-                           <h1>Informations</h1>
+                           <h1>Entity Characterization</h1>
                             <p><b>Entitie</b> : { JSON.parse(localStorage.getItem("tables"))[parseInt(JSON.parse(localStorage.getItem("id")))].nodes[parseInt(localStorage.getItem("from")[1])].label}</p>
                             <p><b>Attributes :</b></p>
                             <List
@@ -358,7 +409,7 @@ function App() {
                                 )}
                             />
                             </div>
-                              : 
+                              :
                               <p><b>Measures</b>: No information</p>
                             }
                             {
@@ -380,9 +431,11 @@ function App() {
                             <p><b>Dimensions</b>: No information</p>
                             }
                         </div>
+                        </Card>
                           :
+                          <Card hoverable style={{ marginTop:'1vh',width: '89%', borderColor: '#2274A5', marginLeft: '0.5vh',minHeight:'50vh'}}>
                           <div>
-                          <h1>Informations</h1>
+                          <h1>Entity Characterization</h1>
                             <p><b>Entitie</b> : No information</p>
                             <p><b>Attributes</b>: No information</p>
                             <p><b>Primary keys</b>: No information</p>
@@ -390,9 +443,10 @@ function App() {
                             <p><b>Measures</b>: No information</p>
                             <p><b>Dimensions</b>: No information</p>
                         </div>
+                        </Card>
                         }
                         
-                </Card>
+                
                 </th>
             </tr>
         </table>

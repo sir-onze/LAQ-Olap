@@ -1,15 +1,16 @@
-import Graph from "react-graph-vis";
 import React from "react";
 import { render } from "react-dom";
 import 'antd/dist/antd.css';
 import { PageHeader, Button, } from 'antd';
 import Dot from './components/Dot'
+import header from './tittle.css'
 const routes= []
 
 render(
   <div>
     <PageHeader
-    style={{backgroundColor:"#2274A5"}}
+
+    style={{backgroundColor:"#2274A5",color:'white'}}
     className="site-page-header"
     title="LAQ-OLAP"
     breadcrumb={{ routes }}
