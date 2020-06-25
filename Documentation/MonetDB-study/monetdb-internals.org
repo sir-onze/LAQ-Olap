@@ -55,8 +55,12 @@
 
 
 * Binary Association Tables
-
-  [[./Pictures/BAT.png]]
+#+NAME: fig:figure batfig
+#+CAPTION: Bat Sample
+#+ATTR_ORG: :width 500
+#+ATTR_LATEX: :width 4.0in
+#+ATTR_HTML: :width 200
+[[./Pictures/BAT.png]]
 
 
 * MAL Reference (MonetDB Assembly Language)
@@ -100,13 +104,23 @@
 ** Instructions
 
     *One liners*   -> easy to parse
-
+    
+    #+NAME: fig:figure instfig
+    #+CAPTION: Instructions example
+    #+ATTR_ORG: :width 500
+    #+ATTR_LATEX: :width 4.0in
+    #+ATTR_HTML: :width 200
     [[./Pictures/instructions-ex.png]]
 
 ** Type System
 
     *Strongly typed language*
-
+    
+    #+NAME: fig:figure polyfig
+    #+CAPTION: Polymophism example
+    #+ATTR_ORG: :width 500
+    #+ATTR_LATEX: :width 4.0in
+    #+ATTR_HTML: :width 200
     [[./Pictures/poly-ex.png]]
 
     - Polymorphic given by "any".
@@ -115,9 +129,19 @@
 ** Flow of Control
 
    *For statement implementation:*
+   #+NAME: fig:figure forfig
+   #+CAPTION: For example
+   #+ATTR_ORG: :width 500
+   #+ATTR_LATEX: :width 4.0in
+   #+ATTR_HTML: :width 200
    [[./Pictures/for-ex.png]]
 
    *If statement implementation:*
+   #+NAME: fig:figure iffig
+   #+CAPTION: If example
+   #+ATTR_ORG: :width 500
+   #+ATTR_LATEX: :width 4.0in
+   #+ATTR_HTML: :width 200
    [[./Pictures/if-ex.png]]
 
 ** Exceptions
@@ -127,6 +151,11 @@
 ** Functions
 
    *Function example*
+   #+NAME: fig:figure funfig
+   #+CAPTION: Function example
+   #+ATTR_ORG: :width 500
+   #+ATTR_LATEX: :width 4.0in
+   #+ATTR_HTML: :width 200
    [[./Pictures/fun-ex.png]]
 
    *Side Effects*
@@ -150,13 +179,24 @@
    | Lexical tokens           | small capitals                  |
    |--------------------------+---------------------------------|
 
+   #+NAME: fig:figure syntaxfig
+   #+CAPTION: Syntax example
+   #+ATTR_ORG: :width 500
+   #+ATTR_LATEX: :width 4.0in
+   #+ATTR_HTML: :width 200
    [[./Pictures/syntax.png]]
 
 ** MAL Interpreter
+   
+   (*To explore.*)
 
 ** MAL Debugger
 
+   (*To explore.*)
+
 ** MAL Profiler
+
+   (*To explore.*)
 
 ** MAL Optimizers
    *Triggered by experimentation and curiousity*
@@ -168,7 +208,11 @@
     (sloppy code-generator or function call resolution decision)
 
 - Common Subexpressions
-
+    #+NAME: fig:figure syntaxfig
+    #+CAPTION: Syntax example
+    #+ATTR_ORG: :width 500
+    #+ATTR_LATEX: :width 4.0in
+    #+ATTR_HTML: :width 200
     [[./Pictures/opt-common-subs-1.png]]              [[./Pictures/opt-common-subs-1+.png]]
 
 - Constant Expression Evaluation
@@ -190,6 +234,28 @@
 - Stack Reduction
 
 ** MAL Modules
+- Alarm
+- Algebra (Important)
+- BAT (Important)
+- BAT Extensions (Important)
+- BBP
+- Calculator
+- Clients (Important)
+- Debugger (Important)
+- Factories
+- Groups (Important)
+- I/O
+- Imprints
+- Inspect
+- Iterators
+- Language Extension
+- Logger
+- MAPI Interface (Important)
+- Manual
+- PCRE Library
+- Profiler
+- Remote
+- Transaction
 
 
 * MAL Algebra
