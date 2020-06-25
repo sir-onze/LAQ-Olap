@@ -12,6 +12,9 @@ Uses *vertical partiotining*.
 - each column is stored in a *binary association table (BAT)*.
 
 
+** MAL
+(Another documentation)
+
 ** X100 -> new query processor (aims to improve MIL)
 Introduces the concept of *in-cache vectorized processing* that strikes a balance between the
 existing *column-at-a-time MIL* and the *tuple-at-a-time Volcano pipelining model*, avoiding
