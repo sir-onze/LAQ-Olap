@@ -1,4 +1,4 @@
-% Created 2020-06-25 qui 13:54
+% Created 2020-06-25 qui 14:40
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -31,14 +31,14 @@
 
 
 \section{MONETDB Internals}
-\label{sec:org2a5861e}
+\label{sec:org28ecd8e}
 
 \url{http://sites.computer.org/debull/A12mar/monetdb.pdf}
 \href{https://www.monetdb.org/Documentation/MonetDBInternals/Overview}{MonetDB Internals}
 \href{https://www.monetdb.org/Developers/SourceCompile}{Source Compile}
 
 \subsection{Redesign considerations.}
-\label{sec:org95bd362}
+\label{sec:orgae98017}
 Redesign of the MonetDB software driven by the need to reduce the effort to extend the system into novel directions and to reduce
 the \textbf{Total Execution Cost (TEC)}.
 
@@ -56,7 +56,7 @@ OLTP -> Online Transaction Processing -> expected most of the cost to be in (P,O
 OLAP -> Online Analytical Processing  -> expected most of the cost to be in (D,E,R)
 
 \subsection{Storage Model}
-\label{sec:org7899b35}
+\label{sec:org7b010c7}
 \begin{itemize}
 \item Represents relational tables using vertical fragmentation.
 \item Stores each column in a separate \{(OID,value)\} table,  called a \textbf{BAT (Binary Association Table)}
@@ -69,7 +69,7 @@ OLAP -> Online Analytical Processing  -> expected most of the cost to be in (D,E
 \end{itemize}
 
 \subsection{All (relational) operators exploit a small set of properties:}
-\label{sec:orgfaa041c}
+\label{sec:orgc82d216}
 \begin{itemize}
 \item seq       - the sequence base, a mapping from array index 0 into a OID value
 \item key       - the values in the column are unique
@@ -81,7 +81,7 @@ OLAP -> Online Analytical Processing  -> expected most of the cost to be in (D,E
 \end{itemize}
 
 \subsection{Execution Model}
-\label{sec:org0fbe547}
+\label{sec:org09504dd}
 \begin{itemize}
 \item \textbf{MonetDB} kernel is an abstract machine, programmed in the \textbf{MonetDB Assemblee Language (MAL)}.
 \item Each relational algebra operator corresponds to a \textbf{MAL instruction} (zero degrees of freedom).
@@ -89,7 +89,7 @@ OLAP -> Online Analytical Processing  -> expected most of the cost to be in (D,E
 \end{itemize}
 
 \subsection{Software Stack}
-\label{sec:orgddfaddd}
+\label{sec:orgaad1103}
 Three software layers:
 \begin{itemize}
 \item \textbf{FRONT-END} \textbf{Query language parser and a heuristic, language - and data model - specific optimizer}. \textbf{OUTPUT} -> logical plan expressed in MAL.
@@ -99,15 +99,17 @@ Three software layers:
 
 
 \section{Binary Association Tables}
-\label{sec:orgb942641}
-
-\begin{center}
-\includegraphics[width=.9\linewidth]{./Pictures/BAT.png}
-\end{center}
+\label{sec:org5c0294f}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=4.0in]{./Pictures/BAT.png}
+\caption{\label{fig:org957153d}
+Bat Sample}
+\end{figure}
 
 
 \section{MAL Reference (MonetDB Assembly Language)}
-\label{sec:orgfa7a4bd}
+\label{sec:org1e1bbd2}
 
 \begin{itemize}
 \item MAL program is considered a specification of intended computation and data flow behavior.
@@ -115,7 +117,7 @@ Three software layers:
 \end{itemize}
 
 \subsection{Literals (follow the lexical conventions of C)}
-\label{sec:orgacbe5b3}
+\label{sec:org6cc5abb}
 
 \begin{center}
 \begin{tabular}{lll}
@@ -148,28 +150,34 @@ str (string) & - & -\\
 \end{center}
 
 \subsection{Variables}
-\label{sec:org676c5db}
+\label{sec:org6265c4a}
 
 \textbf{User Defined} -> start with a letter
 \textbf{Temporary}    -> start with X\_ (generated internally by optimizers)
 
 \subsection{Instructions}
-\label{sec:org3895fcd}
+\label{sec:org823cf8d}
 
 \textbf{One liners}   -> easy to parse
 
-\begin{center}
-\includegraphics[width=.9\linewidth]{./Pictures/instructions-ex.png}
-\end{center}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=4.0in]{./Pictures/instructions-ex.png}
+\caption{\label{fig:orgf0444ea}
+Instructions example}
+\end{figure}
 
 \subsection{Type System}
-\label{sec:orgb78fd43}
+\label{sec:org959fffa}
 
 \textbf{Strongly typed language}
 
-\begin{center}
-\includegraphics[width=.9\linewidth]{./Pictures/poly-ex.png}
-\end{center}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=4.0in]{./Pictures/poly-ex.png}
+\caption{\label{fig:orgfac603f}
+Polymophism example}
+\end{figure}
 
 \begin{itemize}
 \item Polymorphic given by "any".
@@ -177,30 +185,39 @@ str (string) & - & -\\
 \end{itemize}
 
 \subsection{Flow of Control}
-\label{sec:org4750386}
+\label{sec:org2f14421}
 
 \textbf{For statement implementation:}
-\begin{center}
-\includegraphics[width=.9\linewidth]{./Pictures/for-ex.png}
-\end{center}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=4.0in]{./Pictures/for-ex.png}
+\caption{\label{fig:orgcde0b29}
+For example}
+\end{figure}
 
 \textbf{If statement implementation:}
-\begin{center}
-\includegraphics[width=.9\linewidth]{./Pictures/if-ex.png}
-\end{center}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=4.0in]{./Pictures/if-ex.png}
+\caption{\label{fig:org210eeaf}
+If example}
+\end{figure}
 
 \subsection{Exceptions}
-\label{sec:orgbf772d1}
+\label{sec:orgd9945ad}
 
 (\textbf{To explore.})
 
 \subsection{Functions}
-\label{sec:org75cd120}
+\label{sec:orgb518795}
 
 \textbf{Function example}
-\begin{center}
-\includegraphics[width=.9\linewidth]{./Pictures/fun-ex.png}
-\end{center}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=4.0in]{./Pictures/fun-ex.png}
+\caption{\label{fig:org47266f3}
+Function example}
+\end{figure}
 
 \textbf{Side Effects}
 \begin{itemize}
@@ -216,7 +233,7 @@ str (string) & - & -\\
 \end{itemize}
 
 \subsection{MAL Syntax}
-\label{sec:org46e37a4}
+\label{sec:org8bc6049}
 
 \textbf{Expressed in extended Backus–Naur form (EBNF)} \href{https://en.wikipedia.org/wiki/Extended\_Backus\%E2\%80\%93Naur\_form}{Wiki}
 
@@ -232,21 +249,30 @@ Lexical tokens & small capitals\\
 \end{tabular}
 \end{center}
 
-\begin{center}
-\includegraphics[width=.9\linewidth]{./Pictures/syntax.png}
-\end{center}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=4.0in]{./Pictures/syntax.png}
+\caption{\label{fig:orgbfc69c6}
+Syntax example}
+\end{figure}
 
 \subsection{MAL Interpreter}
-\label{sec:orgb313ef1}
+\label{sec:org82709fd}
+
+(\textbf{To explore.})
 
 \subsection{MAL Debugger}
-\label{sec:org885714d}
+\label{sec:org07787af}
+
+(\textbf{To explore.})
 
 \subsection{MAL Profiler}
-\label{sec:org48be40a}
+\label{sec:org3949670}
+
+(\textbf{To explore.})
 
 \subsection{MAL Optimizers}
-\label{sec:org1b4103c}
+\label{sec:orgf2a29dd}
 \textbf{Triggered by experimentation and curiousity}
 
 \begin{itemize}
@@ -257,12 +283,17 @@ Removes coercions that are not needed --> v:= calc.int(23);
 (sloppy code-generator or function call resolution decision)
 
 \item Common Subexpressions
-
-\begin{center}
-\includegraphics[width=.9\linewidth]{./Pictures/opt-common-subs-1.png}
-\end{center}              \begin{center}
-\includegraphics[width=.9\linewidth]{./Pictures/opt-common-subs-1+.png}
-\end{center}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=4.0in]{./Pictures/opt-common-subs-1.png}
+\caption{\label{fig:org96b654f}
+Syntax example}
+\end{figure}              \begin{figure}[htbp]
+\centering
+\includegraphics[width=4.0in]{./Pictures/opt-common-subs-1+.png}
+\caption{\label{fig:org96b654f}
+Syntax example}
+\end{figure}
 
 \item Constant Expression Evaluation
 
@@ -288,11 +319,35 @@ Looks up the MAL query and "composes" multiple joins. \textbf{algebra.join -> al
 \end{itemize}
 
 \subsection{MAL Modules}
-\label{sec:org0a5fc2a}
+\label{sec:org4e6ddc2}
+\begin{itemize}
+\item Alarm
+\item Algebra (Important)
+\item BAT (Important)
+\item BAT Extensions (Important)
+\item BBP
+\item Calculator
+\item Clients (Important)
+\item Debugger (Important)
+\item Factories
+\item Groups (Important)
+\item I/O
+\item Imprints
+\item Inspect
+\item Iterators
+\item Language Extension
+\item Logger
+\item MAPI Interface (Important)
+\item Manual
+\item PCRE Library
+\item Profiler
+\item Remote
+\item Transaction
+\end{itemize}
 
 
 \section{MAL Algebra}
-\label{sec:org62715fd}
+\label{sec:org29da744}
 
 \begin{center}
 \begin{tabular}{lllll}
