@@ -63,6 +63,8 @@
 [[./Pictures/BAT.png]]
 
 
+
+
 * MAL Reference (MonetDB Assembly Language)
 
    - MAL program is considered a specification of intended computation and data flow behavior.
