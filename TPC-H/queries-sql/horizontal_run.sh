@@ -103,7 +103,7 @@ do
     for j in $(seq 1 $nruns)
     do
         s=$(date +%s.%N)
-        mclient -d "$dbname" -p "$port" -w 200 -i < "/tmp/$i" 2>&1 > ../queries-mal/plans/$i
+        mclient -d "$dbname" -p "$port" -w 200 -i < "/tmp/$i" 2>&1 > ../queries-mal/sequential/traces/trace-$i
         x=$(date +%s.%N)
         sec=$(python3 -c "print($x - $s)")
         avg=$(python3 -c "print($avg + $sec)")
@@ -122,4 +122,30 @@ do
     echo "$dbname,$tag,"$(basename $i .sql)",$mn,$mx,$avg" | tee -a "$output"
 done
 
+# ../queries-mal/parallel-4cores/traces/trace-$i
+# ../queries-mal/parallel-4cores/plans/plan-$i
+# ../queries-mal/sequential/traces/trace-$i
+# ../queries-mal/sequential/plans/plan-$i
 
+# sed -i '1s;^;trace ;' 01.sql
+# sed -i '1s;^;trace ;' 02.sql
+# sed -i '1s;^;trace ;' 03.sql 
+# sed -i '1s;^;trace ;' 04.sql 
+# sed -i '1s;^;trace ;' 05.sql 
+# sed -i '1s;^;trace ;' 06.sql 
+# sed -i '1s;^;trace ;' 07.sql 
+# sed -i '1s;^;trace ;' 08.sql 
+# sed -i '1s;^;trace ;' 09.sql 
+# sed -i '1s;^;trace ;' 10.sql 
+# sed -i '1s;^;trace ;' 11.sql 
+# sed -i '1s;^;trace ;' 12.sql 
+# sed -i '1s;^;trace ;' 13.sql 
+# sed -i '1s;^;trace ;' 14.sql 
+# sed -i '1s;^;trace ;' 15.sql
+# sed -i '1s;^;trace ;' 16.sql
+# sed -i '1s;^;trace ;' 17.sql
+# sed -i '1s;^;trace ;' 18.sql
+# sed -i '1s;^;trace ;' 19.sql
+# sed -i '1s;^;trace ;' 20.sql
+# sed -i '1s;^;trace ;' 21.sql
+# sed -i '1s;^;trace ;' 22.sql
