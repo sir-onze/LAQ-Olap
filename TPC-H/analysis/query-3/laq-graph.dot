@@ -36,5 +36,5 @@ graph G {
     krao5 -- krao4
     krao5 -- "lift ( l^extendedprice ∗ ( 1 − l^discount ))"
     
-    Query Result -- krao5
+    "Query Result" -- krao5
 }
