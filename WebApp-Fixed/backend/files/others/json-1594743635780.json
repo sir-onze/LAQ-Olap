@@ -1,0 +1,14 @@
+{
+  "tables": {
+    "nodes": [
+      {
+        "id": 0,
+        "label": "asd",
+        "color": "#e04141",
+        "attribute_aux": [],
+        "physics": false
+      }
+    ],
+    "edges": []
+  }
+}
