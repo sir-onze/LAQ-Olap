@@ -9,14 +9,17 @@ operation successful
 | | | | | project (                                                                                                                                                                                    |
 | | | | | | join (                                                                                                                                                                                     |
 | | | | | | | join (                                                                                                                                                                                   |
+
 | | | | | | | | select (                                                                                                                                                                               |
 | | | | | | | | | table(sys.lineitem) [ "lineitem"."l_orderkey" NOT NULL HASHCOL , "lineitem"."l_extendedprice" NOT NULL, "lineitem"."l_discount" NOT NULL, "lineitem"."l_shipdate" NOT NULL, "lineite |
 : m"."%lineitem_fk1" NOT NULL JOINIDX sys.lineitem.lineitem_fk1 ] COUNT                                                                                                                                :
 | | | | | | | | ) [ "lineitem"."l_shipdate" NOT NULL > date "1995-03-15" ],                                                                                                                            |
+
 | | | | | | | | select (                                                                                                                                                                               |
 | | | | | | | | | table(sys.orders) [ "orders"."o_orderdate" NOT NULL, "orders"."o_shippriority" NOT NULL, "orders"."%TID%" NOT NULL, "orders"."%orders_fk1" NOT NULL JOINIDX sys.orders.orders_fk1 ]  |
 : COUNT                                                                                                                                                                                                :
 | | | | | | | | ) [ "orders"."o_orderdate" NOT NULL < date "1995-03-15" ]                                                                                                                              |
+
 | | | | | | | ) [ "lineitem"."%lineitem_fk1" NOT NULL = "orders"."%TID%" NOT NULL JOINIDX sys.lineitem.lineitem_fk1 ],                                                                                 |
 | | | | | | | select (                                                                                                                                                                                 |
 | | | | | | | | table(sys.customer) [ "customer"."c_mktsegment" NOT NULL, "customer"."%TID%" NOT NULL ] COUNT                                                                                          |
