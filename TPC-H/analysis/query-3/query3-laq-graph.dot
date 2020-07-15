@@ -1,0 +1,40 @@
+graph G {
+
+    node [shape=plaintext]
+    dot1 [ label = <&#8901;> ]
+    dot2 [ label = <&#8901;> ]
+    hadamard [ label = <&#215;> ]
+    krao1 [ label = <&#9661;> ]
+    krao2 [ label = <&#9661;> ]
+    krao3 [ label = <&#9661;> ]
+    krao4 [ label = <&#9661;> ]
+    krao5 [ label = <&#9661;> ]
+    l_orderkey1 [ label = "Lineitem.orderkey"]
+    l_orderkey2 [ label = "Lineitem.orderkey"]
+    
+    dot1 -- "σ ( Customer.mktsegment = 'MACHINERY' )"
+    dot1 -- "Order.custkey"
+    
+    hadamard -- "σ ( Orders.orderdate < '1995-03-10' )"
+    hadamard -- dot1
+    
+    krao1 -- hadamard
+    krao1 -- "Order.orderdate"
+    
+    krao2 -- krao1
+    krao2 -- "Order.shippriority"
+    
+    dot2 -- krao2
+    dot2 -- l_orderkey1
+    
+    krao3 -- "σ ( Lineitem.shipdate > '1995-03-10' )"
+    krao3 -- l_orderkey2
+    
+    krao4 -- dot2
+    krao4 -- krao3
+    
+    krao5 -- krao4
+    krao5 -- "lift ( l^extendedprice ∗ ( 1 − l^discount ))"
+    
+    Query Result -- krao5
+}

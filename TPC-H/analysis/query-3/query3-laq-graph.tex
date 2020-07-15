@@ -1,0 +1,183 @@
+\documentclass{article}
+\usepackage[x11names, svgnames, rgb]{xcolor}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{snakes,arrows,shapes}
+\usepackage{amsmath}
+%
+%
+
+%
+
+%
+
+\begin{document}
+\pagestyle{empty}
+%
+%
+%
+
+\enlargethispage{100cm}
+% Start of code
+% \begin{tikzpicture}[anchor=mid,>=latex',line join=bevel,]
+\begin{tikzpicture}[>=latex',line join=bevel,]
+  \pgfsetlinewidth{1bp}
+%%
+\pgfsetcolor{black}
+  % Edge: dot1 -- σ ( Customer.mktsegment = 'MACHINERY' )
+  \draw [] (260.85bp,73.291bp) .. controls (241.75bp,62.246bp) and (216.22bp,47.474bp)  .. (196.61bp,36.127bp);
+  % Edge: dot1 -- Order.custkey
+  \draw [] (315.08bp,73.465bp) .. controls (334.31bp,62.428bp) and (360.14bp,47.606bp)  .. (380.0bp,36.211bp);
+  % Edge: dot2 -- krao2
+  \draw [] (587.0bp,361.12bp) .. controls (567.66bp,349.74bp) and (541.71bp,334.48bp)  .. (522.31bp,323.06bp);
+  % Edge: dot2 -- l_orderkey1
+  \draw [] (614.0bp,359.7bp) .. controls (614.0bp,348.85bp) and (614.0bp,334.92bp)  .. (614.0bp,324.1bp);
+  % Edge: hadamard -- dot1
+  \draw [] (358.01bp,143.7bp) .. controls (343.6bp,132.85bp) and (325.09bp,118.92bp)  .. (310.72bp,108.1bp);
+  % Edge: hadamard -- σ ( Orders.orderdate < '1995-03-10' )
+  \draw [] (404.24bp,143.7bp) .. controls (418.81bp,132.85bp) and (437.51bp,118.92bp)  .. (452.03bp,108.1bp);
+  % Edge: krao1 -- hadamard
+  \draw [] (422.4bp,215.7bp) .. controls (413.88bp,204.85bp) and (402.93bp,190.92bp)  .. (394.44bp,180.1bp);
+  % Edge: krao1 -- Order.orderdate
+  \draw [] (449.84bp,215.7bp) .. controls (458.52bp,204.85bp) and (469.67bp,190.92bp)  .. (478.32bp,180.1bp);
+  % Edge: krao2 -- krao1
+  \draw [] (480.42bp,287.7bp) .. controls (471.27bp,276.85bp) and (459.53bp,262.92bp)  .. (450.42bp,252.1bp);
+  % Edge: krao2 -- Order.shippriority
+  \draw [] (509.58bp,287.7bp) .. controls (518.73bp,276.85bp) and (530.47bp,262.92bp)  .. (539.58bp,252.1bp);
+  % Edge: krao3 -- l_orderkey2
+  \draw [] (780.0bp,359.7bp) .. controls (780.0bp,348.85bp) and (780.0bp,334.92bp)  .. (780.0bp,324.1bp);
+  % Edge: krao3 -- σ ( Lineitem.shipdate > '1995-03-10' )
+  \draw [] (807.07bp,368.97bp) .. controls (843.76bp,358.09bp) and (910.19bp,338.38bp)  .. (958.32bp,324.11bp);
+  % Edge: krao4 -- dot2
+  \draw [] (676.48bp,431.7bp) .. controls (663.62bp,420.85bp) and (647.1bp,406.92bp)  .. (634.28bp,396.1bp);
+  % Edge: krao4 -- krao3
+  \draw [] (717.52bp,431.7bp) .. controls (730.38bp,420.85bp) and (746.9bp,406.92bp)  .. (759.72bp,396.1bp);
+  % Edge: krao5 -- krao4
+  \draw [] (774.05bp,503.88bp) .. controls (758.24bp,493.03bp) and (737.87bp,479.05bp)  .. (722.05bp,468.19bp);
+  % Edge: krao5 -- lift ( l^extendedprice ∗ ( 1 − l^discount ))
+  \draw [] (824.2bp,503.88bp) .. controls (840.16bp,493.03bp) and (860.73bp,479.05bp)  .. (876.71bp,468.19bp);
+  % Edge: Result -- krao5
+  \draw [] (799.0bp,575.7bp) .. controls (799.0bp,564.85bp) and (799.0bp,550.92bp)  .. (799.0bp,540.1bp);
+  % Node: dot1
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (288.0bp,90.0bp) node {⋅};
+\end{scope}
+  % Node: σ ( Customer.mktsegment = 'MACHINERY' )
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (167.0bp,18.0bp) node {σ ( Customer.mktsegment = 'MACHINERY' )};
+\end{scope}
+  % Node: Order.custkey
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (410.0bp,18.0bp) node {Order.custkey};
+\end{scope}
+  % Node: dot2
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (614.0bp,378.0bp) node {⋅};
+\end{scope}
+  % Node: krao2
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (495.0bp,306.0bp) node {▽};
+\end{scope}
+  % Node: l_orderkey1
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (614.0bp,306.0bp) node {Lineitem.orderkey};
+\end{scope}
+  % Node: hadamard
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (381.0bp,162.0bp) node {×};
+\end{scope}
+  % Node: σ ( Orders.orderdate < '1995-03-10' )
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (475.0bp,90.0bp) node {σ ( Orders.orderdate < '1995-03-10' )};
+\end{scope}
+  % Node: krao1
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (436.0bp,234.0bp) node {▽};
+\end{scope}
+  % Node: Order.orderdate
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (492.0bp,162.0bp) node {Order.orderdate};
+\end{scope}
+  % Node: Order.shippriority
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (554.0bp,234.0bp) node {Order.shippriority};
+\end{scope}
+  % Node: krao3
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (780.0bp,378.0bp) node {▽};
+\end{scope}
+  % Node: l_orderkey2
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (780.0bp,306.0bp) node {Lineitem.orderkey};
+\end{scope}
+  % Node: σ ( Lineitem.shipdate > '1995-03-10' )
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (1016.0bp,306.0bp) node {σ ( Lineitem.shipdate > '1995-03-10' )};
+\end{scope}
+  % Node: krao4
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (697.0bp,450.0bp) node {▽};
+\end{scope}
+  % Node: krao5
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (799.0bp,522.0bp) node {▽};
+\end{scope}
+  % Node: lift ( l^extendedprice ∗ ( 1 − l^discount ))
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (902.0bp,450.0bp) node {lift ( l\^{}extendedprice ∗ ( 1 − l\^{}discount ))};
+\end{scope}
+  % Node: Query
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (878.0bp,594.0bp) node {Query};
+\end{scope}
+  % Node: Result
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (799.0bp,594.0bp) node {Result};
+\end{scope}
+%
+\end{tikzpicture}
+% End of code
+
+%
+\end{document}
+%
+
+
