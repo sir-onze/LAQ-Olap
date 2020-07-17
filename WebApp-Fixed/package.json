@@ -9,6 +9,7 @@
     "@testing-library/react": "^9.4.0",
     "@testing-library/user-event": "^7.2.1",
     "antd": "^3.26.9",
+    "axios": "^0.19.2",
     "d3-graphviz": "^2.6.1",
     "graphviz-react": "^1.0.4",
     "konva": "^4.1.3",
