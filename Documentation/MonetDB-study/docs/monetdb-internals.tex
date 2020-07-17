@@ -1,4 +1,4 @@
-% Created 2020-07-10 sex 12:41
+% Created 2020-07-17 sex 11:46
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -31,16 +31,16 @@
 
 
 \section{MONETDB Internals}
-\label{sec:org3c139da}
+\label{sec:orgc4fc073}
 
 \url{http://sites.computer.org/debull/A12mar/monetdb.pdf}
 \href{https://www.monetdb.org/Documentation/MonetDBInternals/Overview}{MonetDB Internals}
 \href{https://www.monetdb.org/Developers/SourceCompile}{Source Compile}
 
-DOCUMENTATION -> monetdb source/lib/monetdb5/algebra.mal
+Source Documentation -> monetdb\(_{\text{source}}\)/lib/monetdb5/algebra.mal
 
 \subsection{Redesign considerations.}
-\label{sec:orgbb73b86}
+\label{sec:orgbc7f831}
 Redesign of the MonetDB software driven by the need to reduce the effort to extend the system into novel directions and to reduce
 the \textbf{Total Execution Cost (TEC)}.
 
@@ -58,7 +58,7 @@ OLTP -> Online Transaction Processing -> expected most of the cost to be in (P,O
 OLAP -> Online Analytical Processing  -> expected most of the cost to be in (D,E,R)
 
 \subsection{Storage Model}
-\label{sec:orgce82bda}
+\label{sec:org05ee127}
 \begin{itemize}
 \item Represents relational tables using vertical fragmentation.
 \item Stores each column in a separate \{(OID,value)\} table,  called a \textbf{BAT (Binary Association Table)}
@@ -71,7 +71,7 @@ OLAP -> Online Analytical Processing  -> expected most of the cost to be in (D,E
 \end{itemize}
 
 \subsection{All (relational) operators exploit a small set of properties:}
-\label{sec:org81805c1}
+\label{sec:org3c3b01a}
 \begin{itemize}
 \item seq       - the sequence base, a mapping from array index 0 into a OID value
 \item key       - the values in the column are unique
@@ -83,7 +83,7 @@ OLAP -> Online Analytical Processing  -> expected most of the cost to be in (D,E
 \end{itemize}
 
 \subsection{Execution Model}
-\label{sec:org4e4ac35}
+\label{sec:org40eb6ad}
 \begin{itemize}
 \item \textbf{MonetDB} kernel is an abstract machine, programmed in the \textbf{MonetDB Assemblee Language (MAL)}.
 \item Each relational algebra operator corresponds to a \textbf{MAL instruction} (zero degrees of freedom).
@@ -91,7 +91,7 @@ OLAP -> Online Analytical Processing  -> expected most of the cost to be in (D,E
 \end{itemize}
 
 \subsection{Software Stack}
-\label{sec:orgda52bc4}
+\label{sec:org3cc39d9}
 Three software layers:
 \begin{itemize}
 \item \textbf{FRONT-END} \textbf{Query language parser and a heuristic, language - and data model - specific optimizer}. \textbf{OUTPUT} -> logical plan expressed in MAL.
@@ -101,19 +101,19 @@ Three software layers:
 
 
 \section{Binary Association Tables}
-\label{sec:org86d557f}
+\label{sec:orgc769f25}
+
+\textbf{Key-Value Pair Model}
+
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=4.0in]{./Pictures/BAT.png}
-\caption{\label{fig:orga06a27c}
+\caption{\label{fig:org86beea6}
 Bat Sample}
 \end{figure}
 
-
-
-
 \section{MAL Reference (MonetDB Assembly Language)}
-\label{sec:org4029819}
+\label{sec:org30106bd}
 
 \begin{itemize}
 \item MAL program is considered a specification of intended computation and data flow behavior.
@@ -121,7 +121,7 @@ Bat Sample}
 \end{itemize}
 
 \subsection{Literals (follow the lexical conventions of C)}
-\label{sec:orge95f77b}
+\label{sec:org456cfcd}
 
 \begin{center}
 \begin{tabular}{lll}
@@ -154,32 +154,32 @@ str (string) & - & -\\
 \end{center}
 
 \subsection{Variables}
-\label{sec:orgd55972e}
+\label{sec:org8adf0eb}
 
 \textbf{User Defined} -> start with a letter
 \textbf{Temporary}    -> start with X\_ (generated internally by optimizers)
 
 \subsection{Instructions}
-\label{sec:org984b27d}
+\label{sec:orgc2ffb0f}
 
 \textbf{One liners}   -> easy to parse
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=2.0in]{./Pictures/instructions-ex.png}
-\caption{\label{fig:org0b68f90}
+\caption{\label{fig:orge799433}
 Instructions example}
 \end{figure}
 
 \subsection{Type System}
-\label{sec:org0657124}
+\label{sec:orgc4974fd}
 
 \textbf{Strongly typed language}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=2.0in]{./Pictures/poly-ex.png}
-\caption{\label{fig:orgc37f81c}
+\caption{\label{fig:org75c537a}
 Polymophism example}
 \end{figure}
 
@@ -189,13 +189,13 @@ Polymophism example}
 \end{itemize}
 
 \subsection{Flow of Control}
-\label{sec:orge1909ff}
+\label{sec:org284973a}
 
 \textbf{For statement implementation:}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=2.0in]{./Pictures/for-ex.png}
-\caption{\label{fig:orge39c174}
+\caption{\label{fig:org53c875f}
 For example}
 \end{figure}
 
@@ -203,23 +203,22 @@ For example}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=2.0in]{./Pictures/if-ex.png}
-\caption{\label{fig:orgf89138d}
+\caption{\label{fig:org67e727c}
 If example}
 \end{figure}
 
 \subsection{Exceptions}
-\label{sec:orga06e8da}
-
+\label{sec:org770eebf}
 (\textbf{To explore.})
 
 \subsection{Functions}
-\label{sec:org75c43b9}
+\label{sec:orgf2bcbe8}
 
 \textbf{Function example}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=2.0in]{./Pictures/fun-ex.png}
-\caption{\label{fig:org869270e}
+\caption{\label{fig:orgdb1eeef}
 Function example}
 \end{figure}
 
@@ -237,7 +236,7 @@ Function example}
 \end{itemize}
 
 \subsection{MAL Syntax}
-\label{sec:orgfcd0ed6}
+\label{sec:org002a47c}
 
 \textbf{Expressed in extended Backus–Naur form (EBNF)} \href{https://en.wikipedia.org/wiki/Extended\_Backus\%E2\%80\%93Naur\_form}{Wiki}
 
@@ -256,22 +255,22 @@ Lexical tokens & small capitals\\
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=2.0in]{./Pictures/syntax.png}
-\caption{\label{fig:org6f44628}
+\caption{\label{fig:org2aae521}
 Syntax example}
 \end{figure}
 
 \subsection{MAL Interpreter}
-\label{sec:org6d6bedf}
-
+\label{sec:orgc70a39b}
 (\textbf{To explore.})
 
 \subsection{MAL Debugger}
-\label{sec:org920ec76}
-
+\label{sec:org2e426fa}
 (\textbf{To explore.})
 
 \subsection{MAL Profiler}
-\label{sec:org2a43833}
+\label{sec:org41867fc}
+
+\textbf{Stethoscope REPLACED WITH Pystethoscope}
 
 The program stethoscope is a simple Linux application that can attach itself to a running MonetDB server and extracts
 the profiler events from concurrent running queries. Stethoscope is an online-only inspection tool, i.e., it only
@@ -284,68 +283,67 @@ Discontinued:
 \begin{itemize}
 \item Tachograph
 \item Tomograph
-\item 
 \end{itemize}
 
 \subsection{MAL Optimizers}
-\label{sec:org31c07fd}
-\textbf{Triggered by experimentation and curiousity}
+\label{sec:orgb48d3c8}
+\textbf{Triggered by experimentation and curiousity}\\
+\textbf{Check source}\\
+ Cost Model, Alias Removal, Landscape, Lifespans, Macro Processing, Memoization, Multiplex Functions, Remove Actions, Stack Reduction, Garbage Collector
 
-\begin{itemize}
-\item Alias Removal
-\item Building Blocks -> there are examples for a user to build a Optimizer
-\item Coercions
+\subsubsection{Building Blocks}
+\label{sec:org8a71914}
+There are examples for a user to build a Optimizer
+\subsubsection{Coercions}
+\label{sec:org61b41fb}
 Removes coercions that are not needed --> v:= calc.int(23);
 (sloppy code-generator or function call resolution decision)
 
-\item Common Subexpressions
+\subsubsection{Common Subexpressions}
+\label{sec:org7c3c819}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=2.0in]{./Pictures/opt-common-subs-1.png}
-\caption{\label{fig:org8f234ed}
+\caption{\label{fig:org7125cc8}
 Syntax example}
 \end{figure}              
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=2.0in]{./Pictures/opt-common-subs-1+.png}
-\caption{\label{fig:org6a953a5}
+\caption{\label{fig:orge7ad7c9}
 Syntax example 2}
 \end{figure}
 
-\item Constant Expression Evaluation
+\subsubsection{Constant Expression Evaluation}
+\label{sec:orga210bc4}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=2.0in]{./Pictures/const-exps-eval-1.png}
-\caption{\label{fig:orgc534e18}
+\caption{\label{fig:orga8c0465}
 Expression example}
 \end{figure}             
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=2.0in]{./Pictures/const-exps-eval-1+.png}
-\caption{\label{fig:org385f13d}
+\caption{\label{fig:org9bc8cbf}
 Expression example 2}
 \end{figure}
 
-\item Cost Model
-\item Data Flow
-Query executions without side effects can be rearranged.
-\item Garbage Collector
-\item Join Paths
-Looks up the MAL query and "composes" multiple joins. \textbf{algebra.join -> algebra.joinPath}
-\item Landscape
-\item Lifespans
-\item Macro Processing
-\item Memoization
-\item Multiplex Functions
-\item Remove Actions
-\item Stack Reduction
-\end{itemize}
 
-\subsection{MAL Modules}
-\label{sec:org9cb0551}
+\subsubsection{Data Flow}
+\label{sec:org4cde6d9}
+Query executions without side effects can be rearranged.
+
+\subsubsection{Join Paths}
+\label{sec:org893930b}
+Looks up the MAL query and "composes" multiple joins. \textbf{algebra.join -> algebra.joinPath}
+
+
+\subsection{MAL Modules Overview}
+\label{sec:org765af6e}
 \begin{itemize}
 \item Alarm
 \item Algebra (Important)
@@ -372,185 +370,318 @@ Looks up the MAL query and "composes" multiple joins. \textbf{algebra.join -> al
 \end{itemize}
 
 
+\pagebreak
+
 \section{MAL Algebra}
-\label{sec:orga7a043d}
-
-\begin{center}
-\begin{tabular}{lllll}
+\label{sec:orgb0681c2}
+\subsection{Misc}
+\label{sec:orgf6ab7d4}
+\begin{longtable}{|l|l|p{10cm}|}
 \hline
-Operation & MAL Cmd & C Cmd & Arguments/Return & Comment\\
+MAL & Address & Comment\\
 \hline
-GroupBy & groupby & ALGgroupby & gids :: bat-columntype:oid & Produces a new BAT with groups\\
- &  &  & cnts :: bat-columntype:oid & indentified by the head column.\\
- &  &  &  & (The result contains tail times\\
- &  &  & return :: bat-columntype:oid & the head value, ie the tail\\
- &  &  &  & contains the result group sizes.)\\
+\endfirsthead
+\multicolumn{3}{l}{Continued from previous page} \\
 \hline
-Find & find & ALGfind & b :: bat-columntype:any-1 & Returns the index position of a\\
- &  &  & t :: any-1 & value. If no such BUN exists\\
- &  &  &  & return OID-nil.\\
- &  &  & return :: oid & \\
+
+MAL & Address & Comment \\
+
 \hline
-Fetch & fetch & ALGfetchoid & b :: bat-columntype:any-1 & Returns the value of the BUN at\\
- &  &  & x :: oid & x-th position with\\
- &  &  &  & 0 <= x < b.count\\
- &  &  & return :: any-1 & \\
+\endhead
+\hline\multicolumn{3}{r}{Continued on next page} \\
+\endfoot
+\endlastfoot
 \hline
-Project & project & ALGprojecttail & b :: bat-columntype:any-1 & Fill the tail with a constant\\
- &  &  & v :: any-3 & \\
- &  &  &  & \\
- &  &  & return :: bat-columntype:any-3 & \\
+groupby & ALGgroupby & Produces a new BAT with groups indentified by the head column. (The result contains tail times the head value, ie the tail contains the result group sizes.)\\
 \hline
-Projection & projection & ALGprojection & left :: bat-columntype:oid & Project left input onto right input.\\
- &  &  & rigth :: bat-columntype:any-3 & \\
- &  &  &  & \\
- &  &  & return :: bat-columntype:any-3 & \\
+find & ALGfind & Returns the index position of a value. If no such BUN exists return OID-nil.\\
 \hline
-Projection2 & projection2 & ALGprojection2 & left :: bat-columntype:oid & Project left input onto right inputs\\
- &  &  & rigth1 :: bat-columntype:any-3 & which should be consecutive.\\
- &  &  & rigth2 :: bat-columntype:any-3 & \\
- &  &  &  & \\
- &  &  & return :: bat-columntype:any-3 & \\
+fetch & ALGfetchoid & Returns the value of the BUN at x-th position with 0 <= x < b.count\\
 \hline
-\end{tabular}
-\end{center}
-
-\textbf{BAT copying}
-
-\begin{center}
-\begin{tabular}{lllll}
+project & ALGprojecttail & Fill the tail with a constant\\
 \hline
-Operation & MAL Cmd & C Cmd & Arguments/Return & Comment\\
+projection & ALGprojection & Project left input onto right input.\\
 \hline
-Copy & copy & ALGcopy & b :: bat-columntype:any-1 & Returns physical copy of a BAT.\\
- &  &  &  & \\
- &  &  & return :: bat-columntype:any-1 & \\
+projection2 & ALGprojection2 & Project left input onto right inputs which should be consecutive.\\
 \hline
-Exist & exist & ALGexist & b :: bat-columntype:any-1 & Returns whether 'val' occurs in b.\\
- &  &  &  & \\
- &  &  & return :: bit & \\
+\end{longtable}
+
+\subsection{BAT copying}
+\label{sec:orga3236dd}
+\begin{longtable}{|l|l|p{10cm}|}
 \hline
-\end{tabular}
-\end{center}
+MAL & Address & Comment\\
+\hline
+\endfirsthead
+\multicolumn{3}{l}{Continued from previous page} \\
+\hline
 
-\textbf{select}
-ALGselect1
-ALGselect2
-ALGselect1nil
-ALGselect2nil
+MAL & Address & Comment \\
 
-\textbf{thetaselect}
-ALGthetaselect1
-ALGthetaselect2
+\hline
+\endhead
+\hline\multicolumn{3}{r}{Continued on next page} \\
+\endfoot
+\endlastfoot
+\hline
+copy & ALGcopy & Returns physical copy of a BAT.\\
+\hline
+exist & ALGexist & Returns whether 'val' occurs in b.\\
+\hline
+\end{longtable}
 
-\textbf{selectNotNil}
-ALGselectNotNil
+\subsection{Selecting}
+\label{sec:org854b937}
+The range selections are targeted at the tail of the BAT.
+\begin{longtable}{|l|l|p{10cm}|}
+\hline
+MAL & Address & Comment\\
+\hline
+\endfirsthead
+\multicolumn{3}{l}{Continued from previous page} \\
+\hline
 
-\textbf{sort}
-ALGsort11
-ALGsort12
-ALGsort13
-ALGsort21
-ALGsort22
-ALGsort23
-ALGsort31
-ALGsort32
-ALGsort33
+MAL & Address & Comment \\
 
-\textbf{unique}
-ALGunique2
-ALGunique1
+\hline
+\endhead
+\hline\multicolumn{3}{r}{Continued on next page} \\
+\endfoot
+\endlastfoot
+\hline
+select & ALGselect1 & Select all head values for which the tail value is in range.	Input is a dense-headed BAT, output is a dense-headed BAT with in	the tail the head value of the input BAT for which the tail value	is between the values low and high (inclusive if li respectively	hi is set).  The output BAT is sorted on the tail value.\\
+\hline
+select & ALGselect2 & Select all head values of the first input BAT for which the tail value	is in range and for which the head value occurs in the tail of the	second input BAT.	The first input is a dense-headed BAT, the second input is a	dense-headed BAT with sorted tail, output is a dense-headed BAT	with in the tail the head value of the input BAT for which the	tail value is between the values low and high (inclusive if li	respectively hi is set).  The output BAT is sorted on the tail	value.\\
+\hline
+select & ALGselect1nil & With unknown set, each nil != nil\\
+\hline
+select & ALGselect2nil & With unknown set, each nil != nil\\
+\hline
+selectNotNil & ALGselectNotNil & Select all not-nil values.\\
+\hline
+thetaselect & ALGthetaselect1 & Select all head values for which the tail value obeys the relation value OP VAL.	Input is a dense-headed BAT, output is a dense-headed BAT with in	the tail the head value of the input BAT for which the relationship holds.  The output BAT is sorted on the tail value.\\
+\hline
+thetaselect & ALGthetaselect2 & Select all head values of the first input BAT for which the tail value	obeys the relation value OP VAL and for which the head value occurs in	the tail of the second input BAT.	Input is a dense-headed BAT, output is a dense-headed BAT with in	the tail the head value of the input BAT for which the relationship holds.  The output BAT is sorted on the tail value.\\
+\hline
+\end{longtable}
 
-\textbf{\textbf{Join operations}}
-\textbf{crossproduct}
-ALGcrossproduct2
+\subsection{Sort}
+\label{sec:org4b4c3d0}
+\begin{longtable}{|l|l|p{10cm}|}
+\hline
+MAL & Address & Comment\\
+\hline
+\endfirsthead
+\multicolumn{3}{l}{Continued from previous page} \\
+\hline
 
-\textbf{join}
-ALGjoin
-ALGjoin1
+MAL & Address & Comment \\
 
-\textbf{leftjoing}
-ALGleftjoin
-ALGleftjoin1
+\hline
+\endhead
+\hline\multicolumn{3}{r}{Continued on next page} \\
+\endfoot
+\endlastfoot
+\hline
+sort & ALGsort11 & Returns a copy of the BAT sorted on tail values. The order is descending if the reverse bit is set. This is a stable sort if the stable bit is set.\\
+\hline
+sort & ALGsort12 & Returns a copy of the BAT sorted on tail values and a BAT that specifies how the input was reordered. The order is descending if the reverse bit is set. This is a stable sort if the stable bit is set.\\
+\hline
+sort & ALGsort13 & Returns a copy of the BAT sorted on tail values, a BAT that specifies how the input was reordered, and a BAT with group information. The order is descending if the reverse bit is set. This is a stable sort if the stable bit is set.\\
+\hline
+sort & ALGsort21 & Returns a copy of the BAT sorted on tail values. The order is descending if the reverse bit is set. This is a stable sort if the stable bit is set.\\
+\hline
+sort & ALGsort22 & Returns a copy of the BAT sorted on tail values and a BAT that specifies how the input was reordered. The order is descending if the reverse bit is set. This is a stable sort if the stable bit is set.\\
+\hline
+sort & ALGsort23 & Returns a copy of the BAT sorted on tail values, a BAT that specifies how the input was reordered, and a BAT with group information. The order is descending if the reverse bit is set. This is a stable sort if the stable bit is set.\\
+\hline
+sort & ALGsort31 & Returns a copy of the BAT sorted on tail values. The order is descending if the reverse bit is set. This is a stable sort if the stable bit is set.\\
+\hline
+sort & ALGsort32 & Returns a copy of the BAT sorted on tail values and a BAT that specifies how the input was reordered. The order is descending if the reverse bit is set. This is a stable sort if the stable bit is set.\\
+\hline
+sort & ALGsort33 & Returns a copy of the BAT sorted on tail values, a BAT that specifies how the input was reordered, and a BAT with group information. The order is descending if the reverse bit is set. This is a stable sort if the stable bit is set.\\
+\hline
+\end{longtable}
 
-\textbf{outerjoin}
-ALGouterjoin
+\subsection{Unique}
+\label{sec:org3517f5b}
+\begin{longtable}{|l|l|p{10cm}|}
+\hline
+MAL & Address & Comment\\
+\hline
+\endfirsthead
+\multicolumn{3}{l}{Continued from previous page} \\
+\hline
 
-\textbf{semijoin}
-ALGsemijoin
+MAL & Address & Comment \\
 
-\textbf{thetajoin}
-ALGthetajoin
+\hline
+\endhead
+\hline\multicolumn{3}{r}{Continued on next page} \\
+\endfoot
+\endlastfoot
+\hline
+unique & ALGunique2 & Select all unique values from the tail of the first input. Input is a dense-headed BAT, the second input is a	dense-headed BAT with sorted tail, output is a dense-headed	BAT with in the tail the head value of the input BAT that was	selected.  The output BAT is sorted on the tail value.  The	second input BAT is a list of candidates.\\
+\hline
+unique & ALGunique1 & Select all unique values from the tail of the input. Input is a dense-headed BAT, output is a dense-headed BAT with	in the tail the head value of the input BAT that was selected.	The output BAT is sorted on the tail value.\\
+\hline
+\end{longtable}
 
-\textbf{band join}
-ALGbandjoin
+\subsection{Join operations}
+\label{sec:orgf835797}
+\subsubsection{Crossproduct}
+\label{sec:orgeaa36b8}
+\begin{longtable}{|l|l|p{10cm}|}
+\hline
+MAL & Address & Comment\\
+\hline
+\endfirsthead
+\multicolumn{3}{l}{Continued from previous page} \\
+\hline
 
-\textbf{rangejoin}
-ALGrangejoin
+MAL & Address & Comment \\
 
-\textbf{difference}
-ALGdifference
+\hline
+\endhead
+\hline\multicolumn{3}{r}{Continued on next page} \\
+\endfoot
+\endlastfoot
+\hline
+crossproduct & ALGcrossproduct2 & Returns 2 columns with all BUNs, consisting of the head-oids from 'left' and 'right' for which there are BUNs in 'left' and 'right' with equal tails\\
+\hline
+\end{longtable}
 
-\textbf{intersect}
-ALGintersect
+\subsubsection{Joining}
+\label{sec:org616022d}
+\begin{longtable}{|l|l|p{10cm}|}
+\hline
+MAL & Address & Comment\\
+\hline
+\endfirsthead
+\multicolumn{3}{l}{Continued from previous page} \\
+\hline
 
-\textbf{\textbf{Projection operations}}
-\textbf{firstn}
-ALGfirstn
-\textbf{reuse}
-ALGreuse
+MAL & Address & Comment \\
 
-\textbf{slice}
-ALGslice\(_{\text{oid}}\)
-ALGslice
-ALGslice\(_{\text{int}}\)
-ALGslice\(_{\text{lng}}\)
-\textbf{subslice}
-ALGsubslice\(_{\text{lng}}\)
+\hline
+\endhead
+\hline\multicolumn{3}{r}{Continued on next page} \\
+\endfoot
+\endlastfoot
+\hline
+join & ALGjoin & Join\\
+\hline
+join & ALGjoin1 & Join; only produce left output\\
+\hline
+leftjoin & ALGleftjoin & Left join with candidate lists\\
+\hline
+leftjoin & ALGleftjoin1 & Left join with candidate lists; only produce left output\\
+\hline
+outerjoin & ALGouterjoin & Left outer join with candidate lists\\
+\hline
+semijoin & ALGsemijoin & Semi join with candidate lists\\
+\hline
+thetajoin & ALGthetajoin & Theta join with candidate lists\\
+\hline
+bandjoin & ALGbandjoin & Band join: values in l and r match if r - c1 <[=] l <[=] r + c2\\
+\hline
+rangejoin & ALGrangejoin & Range join: values in l and r1/r2 match if r1 <[=] l <[=] r2\\
+\hline
+difference & ALGdifference & Difference of l and r with candidate lists\\
+\hline
+intersect & ALGintersect & Intersection of l and r with candidate lists (i.e. half of semi-join)\\
+\hline
+\end{longtable}
 
-\textbf{\textbf{Common BAT Aggregates}}
+\subsection{Projection operations}
+\label{sec:org7af1bf5}
+\begin{longtable}{|l|l|p{10cm}|}
+\hline
+MAL & Address & Comment\\
+\hline
+\endfirsthead
+\multicolumn{3}{l}{Continued from previous page} \\
+\hline
 
-\textbf{count}
-ALGcount\(_{\text{bat}}\)
-ALGcount\(_{\text{nil}}\)
-\textbf{count\(_{\text{no}}\)\(_{\text{nil}}\)}
-ALGcount\(_{\text{no}}\)\(_{\text{nil}}\)
+MAL & Address & Comment \\
 
-\textbf{count}
-ALGcountCND\(_{\text{bat}}\)
-ALGcountCND\(_{\text{nil}}\)
-\textbf{count\(_{\text{no}}\)\(_{\text{nil}}\)}
-ALGcountCND\(_{\text{no}}\)\(_{\text{nil}}\)
+\hline
+\endhead
+\hline\multicolumn{3}{r}{Continued on next page} \\
+\endfoot
+\endlastfoot
+\hline
+firstn & ALGfirstn & Calculate first N values of B\\
+\hline
+reuse & ALGreuse & Reuse a temporary BAT if you can. Otherwise, allocate enough storage to accept result of an	operation (not involving the heap)\\
+\hline
+slice & ALGslice$\backslash$\(_{\text{oid}}\) & Return the slice based on head oid x till y (exclusive).\\
+\hline
+slice & ALGslice & Return the slice with the BUNs at position x till y\\
+\hline
+slice & ALGslice$\backslash$\(_{\text{int}}\) & Return the slice with the BUNs at position x till y\\
+\hline
+slice & ALGslice$\backslash$\(_{\text{lng}}\) & Return the slice with the BUNs at position x till y\\
+\hline
+subslice & ALGsubslice$\backslash$\(_{\text{lng}}\) & Return the oids of the slice with the BUNs at position x till y\\
+\hline
+\end{longtable}
 
-\textbf{\textbf{Default Min and Max}}
+\subsection{Common BAT Aggregates}
+\label{sec:orga96876a}
+These operations examine a BAT, and compute some simple aggregate result over it.
+\begin{longtable}{|l|l|p{10cm}|}
+\hline
+MAL & Address & Comment\\
+\hline
+\endfirsthead
+\multicolumn{3}{l}{Continued from previous page} \\
+\hline
 
-\textbf{cardinality}
-ALGcard
-\textbf{min}
-ALGminany
-ALGminany\(_{\text{skipnil}}\)
-\textbf{max}
-ALGmaxany
-ALGmaxany\(_{\text{skipnil}}\)
+MAL & Address & Comment \\
+
+\hline
+\endhead
+\hline\multicolumn{3}{r}{Continued on next page} \\
+\endfoot
+\endlastfoot
+\hline
+count & ALGcount$\backslash$\(_{\text{bat}}\) & Return the current size (in number of elements) in a BAT.\\
+\hline
+count & ALGcount$\backslash$\(_{\text{nil}}\) & Return the number of elements currently in a BAT ignores BUNs with nil-tail iff ignore\(_{\text{nils}}\)==TRUE.\\
+\hline
+count & ALGcountCND$\backslash$\(_{\text{bat}}\) & Return the current size (in number of elements) in a BAT.\\
+\hline
+count & ALGcountCND$\backslash$\(_{\text{nil}}\) & Return the number of elements currently in a BAT ignores BUNs with nil-tail iff ignore\(_{\text{nils}}\)==TRUE.\\
+\hline
+count\(_{\text{no}}\)\(_{\text{nil}}\) & ALGcount\(_{\text{no}}\)$\backslash$\(_{\text{nil}}\) & Return the number of elements currently	in a BAT ignoring BUNs with nil-tail\\
+\hline
+count\(_{\text{no}}\)\(_{\text{nil}}\) & ALGcountCND$\backslash$\(_{\text{no}}\)$\backslash$\(_{\text{nil}}\) & Return the number of elements currently	in a BAT ignoring BUNs with nil-tail\\
+\hline
+\end{longtable}
+
+\subsection{Default Min and Max}
+\label{sec:orgd4d27d0}
+Implementations a generic Min and Max routines get declared first. The @emph\{min()\} and @emph\{max()\} routines below catch any tail-type.
+The type-specific routines defined later are faster, and will override these any implementations.
+
+\textbf{cardinality} - ALGcard
+\textbf{min} - ALGminany, ALGminany\(_{\text{skipnil}}\)
+\textbf{max} - ALGmaxany, ALGmaxany\(_{\text{skipnil}}\)
 
 PATTERN
-\textbf{avg}
-CMDcalcavg
+\textbf{avg} - CMDcalcavg
 
-\textbf{\textbf{Standard deviation}}
+\subsection{Standard deviation}
+\label{sec:org3d04294}
+The standard deviation of a set is the square root of its variance.
+The variance is the sum of squares of the deviation of each value in the set from the mean (average) value, divided by the population of the set.
 
-\textbf{stdeb}
-ALGstdev
-\textbf{stdevp}
-ALGstdevp
-\textbf{variance}
-ALGvariance
-\textbf{variancep}
-ALGvariancep
-\textbf{covariance}
-ALGcovariance
-\textbf{covariancep}
-ALGcovariancep
-\textbf{corr}
-ALGcorr
+\textbf{stdeb} - ALGstdev
+\textbf{stdevp} - ALGstdevp
+\textbf{variance} - ALGvariance
+\textbf{variancep} - ALGvariancep
+\textbf{covariance} - ALGcovariance
+\textbf{covariancep} - ALGcovariancep
+\textbf{corr} - ALGcorr
 \end{document}

@@ -8,7 +8,7 @@
 [[https://www.monetdb.org/Documentation/MonetDBInternals/Overview][MonetDB Internals]]
 [[https://www.monetdb.org/Developers/SourceCompile][Source Compile]]
 
-DOCUMENTATION -> monetdb source/lib/monetdb5/algebra.mal
+Source Documentation -> monetdb_source/lib/monetdb5/algebra.mal
 
 ** Redesign considerations.
  Redesign of the MonetDB software driven by the need to reduce the effort to extend the system into novel directions and to reduce
@@ -57,15 +57,15 @@ DOCUMENTATION -> monetdb source/lib/monetdb5/algebra.mal
 
 
 * Binary Association Tables
-#+NAME: fig:figure batfig
-#+CAPTION: Bat Sample
-#+ATTR_ORG: :width 500
-#+ATTR_LATEX: :width 4.0in
-#+ATTR_HTML: :width 200
-[[./Pictures/BAT.png]]
 
+  *Key-Value Pair Model*
 
-
+  #+NAME: fig:figure batfig
+  #+CAPTION: Bat Sample
+  #+ATTR_ORG: :width 500
+  #+ATTR_LATEX: :width 4.0in
+  #+ATTR_HTML: :width 200
+  [[./Pictures/BAT.png]]
 
 * MAL Reference (MonetDB Assembly Language)
 
@@ -149,7 +149,6 @@ DOCUMENTATION -> monetdb source/lib/monetdb5/algebra.mal
    [[./Pictures/if-ex.png]]
 
 ** Exceptions
-
    (*To explore.*)
 
 ** Functions
@@ -191,15 +190,15 @@ DOCUMENTATION -> monetdb source/lib/monetdb5/algebra.mal
    [[./Pictures/syntax.png]]
 
 ** MAL Interpreter
-   
    (*To explore.*)
 
 ** MAL Debugger
-
    (*To explore.*)
 
 ** MAL Profiler
    
+   *Stethoscope REPLACED WITH Pystethoscope*
+
    The program stethoscope is a simple Linux application that can attach itself to a running MonetDB server and extracts
    the profiler events from concurrent running queries. Stethoscope is an online-only inspection tool, i.e., it only
    monitors the execution state of the current queries and outputs the information in STDOUT for immediate inspection.
@@ -210,18 +209,19 @@ DOCUMENTATION -> monetdb source/lib/monetdb5/algebra.mal
     Discontinued:
     - Tachograph
     - Tomograph
-    - 
 
 ** MAL Optimizers
-   *Triggered by experimentation and curiousity*
+   *Triggered by experimentation and curiousity*\\
+   *Check source*\\
+    Cost Model, Alias Removal, Landscape, Lifespans, Macro Processing, Memoization, Multiplex Functions, Remove Actions, Stack Reduction, Garbage Collector
 
-- Alias Removal
-- Building Blocks -> there are examples for a user to build a Optimizer
-- Coercions
+*** Building Blocks
+    There are examples for a user to build a Optimizer
+*** Coercions
     Removes coercions that are not needed --> v:= calc.int(23);
     (sloppy code-generator or function call resolution decision)
 
-- Common Subexpressions
+*** Common Subexpressions
     #+NAME: fig:figure syntaxfig
     #+CAPTION: Syntax example
     #+ATTR_ORG: :width 500
@@ -236,7 +236,7 @@ DOCUMENTATION -> monetdb source/lib/monetdb5/algebra.mal
     #+ATTR_HTML: :width 200
     [[./Pictures/opt-common-subs-1+.png]]
 
-- Constant Expression Evaluation
+*** Constant Expression Evaluation
 
     #+NAME: fig:figure syntaxfig
     #+CAPTION: Expression example
@@ -252,21 +252,15 @@ DOCUMENTATION -> monetdb source/lib/monetdb5/algebra.mal
     #+ATTR_HTML: :width 200
     [[./Pictures/const-exps-eval-1+.png]]
 
-- Cost Model
-- Data Flow
-    Query executions without side effects can be rearranged.
-- Garbage Collector
-- Join Paths
-    Looks up the MAL query and "composes" multiple joins. *algebra.join -> algebra.joinPath*
-- Landscape
-- Lifespans
-- Macro Processing
-- Memoization
-- Multiplex Functions
-- Remove Actions
-- Stack Reduction
 
-** MAL Modules
+*** Data Flow
+    Query executions without side effects can be rearranged.
+
+*** Join Paths
+    Looks up the MAL query and "composes" multiple joins. *algebra.join -> algebra.joinPath*
+
+
+** MAL Modules Overview
 - Alarm
 - Algebra (Important)
 - BAT (Important)
@@ -291,181 +285,187 @@ DOCUMENTATION -> monetdb source/lib/monetdb5/algebra.mal
 - Transaction
 
 
+\pagebreak
+
 * MAL Algebra
+** Misc
+#+ATTR_LATEX: :environment longtable :align |l|l|p{10cm}|
+|-------------+----------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| MAL         | Address        | Comment                                                                                                                                                      |
+|-------------+----------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| groupby     | ALGgroupby     | Produces a new BAT with groups indentified by the head column. (The result contains tail times the head value, ie the tail contains the result group sizes.) |
+|-------------+----------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| find        | ALGfind        | Returns the index position of a value. If no such BUN exists return OID-nil.                                                                                 |
+|-------------+----------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| fetch       | ALGfetchoid    | Returns the value of the BUN at x-th position with 0 <= x < b.count                                                                                          |
+|-------------+----------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| project     | ALGprojecttail | Fill the tail with a constant                                                                                                                                |
+|-------------+----------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| projection  | ALGprojection  | Project left input onto right input.                                                                                                                         |
+|-------------+----------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| projection2 | ALGprojection2 | Project left input onto right inputs which should be consecutive.                                                                                            |
+|-------------+----------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------|
 
-|-------------+-------------+----------------+--------------------------------+--------------------------------------|
-| Operation   | MAL Cmd     | C Cmd          | Arguments/Return               | Comment                              |
-|-------------+-------------+----------------+--------------------------------+--------------------------------------|
-| GroupBy     | groupby     | ALGgroupby     | gids :: bat-columntype:oid     | Produces a new BAT with groups       |
-|             |             |                | cnts :: bat-columntype:oid     | indentified by the head column.      |
-|             |             |                |                                | (The result contains tail times      |
-|             |             |                | return :: bat-columntype:oid   | the head value, ie the tail          |
-|             |             |                |                                | contains the result group sizes.)    |
-|-------------+-------------+----------------+--------------------------------+--------------------------------------|
-| Find        | find        | ALGfind        | b :: bat-columntype:any-1      | Returns the index position of a      |
-|             |             |                | t :: any-1                     | value. If no such BUN exists         |
-|             |             |                |                                | return OID-nil.                      |
-|             |             |                | return :: oid                  |                                      |
-|-------------+-------------+----------------+--------------------------------+--------------------------------------|
-| Fetch       | fetch       | ALGfetchoid    | b :: bat-columntype:any-1      | Returns the value of the BUN at      |
-|             |             |                | x :: oid                       | x-th position with                   |
-|             |             |                |                                | 0 <= x < b.count                     |
-|             |             |                | return :: any-1                |                                      |
-|-------------+-------------+----------------+--------------------------------+--------------------------------------|
-| Project     | project     | ALGprojecttail | b :: bat-columntype:any-1      | Fill the tail with a constant        |
-|             |             |                | v :: any-3                     |                                      |
-|             |             |                |                                |                                      |
-|             |             |                | return :: bat-columntype:any-3 |                                      |
-|-------------+-------------+----------------+--------------------------------+--------------------------------------|
-| Projection  | projection  | ALGprojection  | left :: bat-columntype:oid     | Project left input onto right input. |
-|             |             |                | rigth :: bat-columntype:any-3  |                                      |
-|             |             |                |                                |                                      |
-|             |             |                | return :: bat-columntype:any-3 |                                      |
-|-------------+-------------+----------------+--------------------------------+--------------------------------------|
-| Projection2 | projection2 | ALGprojection2 | left :: bat-columntype:oid     | Project left input onto right inputs |
-|             |             |                | rigth1 :: bat-columntype:any-3 | which should be consecutive.         |
-|             |             |                | rigth2 :: bat-columntype:any-3 |                                      |
-|             |             |                |                                |                                      |
-|             |             |                | return :: bat-columntype:any-3 |                                      |
-|-------------+-------------+----------------+--------------------------------+--------------------------------------|
+** BAT copying
+#+ATTR_LATEX: :environment longtable :align |l|l|p{10cm}|
+|-------+----------+------------------------------------|
+| MAL   | Address  | Comment                            |
+|-------+----------+------------------------------------|
+| copy  | ALGcopy  | Returns physical copy of a BAT.    |
+|-------+----------+------------------------------------|
+| exist | ALGexist | Returns whether 'val' occurs in b. |
+|-------+----------+------------------------------------|
 
-*BAT copying*
+** Selecting
+The range selections are targeted at the tail of the BAT.
+#+ATTR_LATEX: :environment longtable :align |l|l|p{10cm}|
+|--------------+-----------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| MAL          | Address         | Comment                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+|--------------+-----------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| select       | ALGselect1      | Select all head values for which the tail value is in range.	Input is a dense-headed BAT, output is a dense-headed BAT with in	the tail the head value of the input BAT for which the tail value	is between the values low and high (inclusive if li respectively	hi is set).  The output BAT is sorted on the tail value.                                                                                                                                                                       |
+|--------------+-----------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| select       | ALGselect2      | Select all head values of the first input BAT for which the tail value	is in range and for which the head value occurs in the tail of the	second input BAT.	The first input is a dense-headed BAT, the second input is a	dense-headed BAT with sorted tail, output is a dense-headed BAT	with in the tail the head value of the input BAT for which the	tail value is between the values low and high (inclusive if li	respectively hi is set).  The output BAT is sorted on the tail	value. |
+|--------------+-----------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| select       | ALGselect1nil   | With unknown set, each nil != nil                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+|--------------+-----------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| select       | ALGselect2nil   | With unknown set, each nil != nil                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+|--------------+-----------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| selectNotNil | ALGselectNotNil | Select all not-nil values.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+|--------------+-----------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| thetaselect  | ALGthetaselect1 | Select all head values for which the tail value obeys the relation value OP VAL.	Input is a dense-headed BAT, output is a dense-headed BAT with in	the tail the head value of the input BAT for which the relationship holds.  The output BAT is sorted on the tail value.                                                                                                                                                                                                                         |
+|--------------+-----------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| thetaselect  | ALGthetaselect2 | Select all head values of the first input BAT for which the tail value	obeys the relation value OP VAL and for which the head value occurs in	the tail of the second input BAT.	Input is a dense-headed BAT, output is a dense-headed BAT with in	the tail the head value of the input BAT for which the relationship holds.  The output BAT is sorted on the tail value.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+|--------------+-----------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 
-|-----------+---------+----------+--------------------------------+------------------------------------|
-| Operation | MAL Cmd | C Cmd    | Arguments/Return               | Comment                            |
-|-----------+---------+----------+--------------------------------+------------------------------------|
-| Copy      | copy    | ALGcopy  | b :: bat-columntype:any-1      | Returns physical copy of a BAT.    |
-|           |         |          |                                |                                    |
-|           |         |          | return :: bat-columntype:any-1 |                                    |
-|-----------+---------+----------+--------------------------------+------------------------------------|
-| Exist     | exist   | ALGexist | b :: bat-columntype:any-1      | Returns whether 'val' occurs in b. |
-|           |         |          |                                |                                    |
-|           |         |          | return :: bit                  |                                    |
-|-----------+---------+----------+--------------------------------+------------------------------------|
+** Sort
+#+ATTR_LATEX: :environment longtable :align |l|l|p{10cm}|
+|------+-----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| MAL  | Address   | Comment                                                                                                                                                                                                                                 |
+|------+-----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| sort | ALGsort11 | Returns a copy of the BAT sorted on tail values. The order is descending if the reverse bit is set. This is a stable sort if the stable bit is set.                                                                                     |
+|------+-----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| sort | ALGsort12 | Returns a copy of the BAT sorted on tail values and a BAT that specifies how the input was reordered. The order is descending if the reverse bit is set. This is a stable sort if the stable bit is set.                                |
+|------+-----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| sort | ALGsort13 | Returns a copy of the BAT sorted on tail values, a BAT that specifies how the input was reordered, and a BAT with group information. The order is descending if the reverse bit is set. This is a stable sort if the stable bit is set. |
+|------+-----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| sort | ALGsort21 | Returns a copy of the BAT sorted on tail values. The order is descending if the reverse bit is set. This is a stable sort if the stable bit is set.                                                                                     |
+|------+-----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| sort | ALGsort22 | Returns a copy of the BAT sorted on tail values and a BAT that specifies how the input was reordered. The order is descending if the reverse bit is set. This is a stable sort if the stable bit is set.                                |
+|------+-----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| sort | ALGsort23 | Returns a copy of the BAT sorted on tail values, a BAT that specifies how the input was reordered, and a BAT with group information. The order is descending if the reverse bit is set. This is a stable sort if the stable bit is set. |
+|------+-----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| sort | ALGsort31 | Returns a copy of the BAT sorted on tail values. The order is descending if the reverse bit is set. This is a stable sort if the stable bit is set.                                                                                     |
+|------+-----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| sort | ALGsort32 | Returns a copy of the BAT sorted on tail values and a BAT that specifies how the input was reordered. The order is descending if the reverse bit is set. This is a stable sort if the stable bit is set.                                |
+|------+-----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| sort | ALGsort33 | Returns a copy of the BAT sorted on tail values, a BAT that specifies how the input was reordered, and a BAT with group information. The order is descending if the reverse bit is set. This is a stable sort if the stable bit is set.                                                                                                                                                                                                                                          |
+|------+-----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 
-*select*
-ALGselect1
-ALGselect2
-ALGselect1nil
-ALGselect2nil
+** Unique
+#+ATTR_LATEX: :environment longtable :align |l|l|p{10cm}|
+|--------+------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| MAL    | Address    | Comment                                                                                                                                                                                                                                                                                                                                           |
+|--------+------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| unique | ALGunique2 | Select all unique values from the tail of the first input. Input is a dense-headed BAT, the second input is a	dense-headed BAT with sorted tail, output is a dense-headed	BAT with in the tail the head value of the input BAT that was	selected.  The output BAT is sorted on the tail value.  The	second input BAT is a list of candidates. |
+|--------+------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| unique | ALGunique1 | Select all unique values from the tail of the input. Input is a dense-headed BAT, output is a dense-headed BAT with	in the tail the head value of the input BAT that was selected.	The output BAT is sorted on the tail value.                                                                                                                  |
+|--------+------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 
-*thetaselect*
-ALGthetaselect1
-ALGthetaselect2
+** Join operations
+*** Crossproduct
+#+ATTR_LATEX: :environment longtable :align |l|l|p{10cm}|
+|--------------+------------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
+| MAL          | Address          | Comment                                                                                                                                              |
+|--------------+------------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
+| crossproduct | ALGcrossproduct2 | Returns 2 columns with all BUNs, consisting of the head-oids from 'left' and 'right' for which there are BUNs in 'left' and 'right' with equal tails |
+|--------------+------------------+------------------------------------------------------------------------------------------------------------------------------------------------------|
 
-*selectNotNil*
-ALGselectNotNil
+*** Joining
+#+ATTR_LATEX: :environment longtable :align |l|l|p{10cm}|
+|------------+---------------+-----------------------------------------------------------------------|
+| MAL        | Address       | Comment                                                               |
+|------------+---------------+-----------------------------------------------------------------------|
+| join       | ALGjoin       | Join                                                                  |
+|------------+---------------+-----------------------------------------------------------------------|
+| join       | ALGjoin1      | Join; only produce left output                                        |
+|------------+---------------+-----------------------------------------------------------------------|
+| leftjoin   | ALGleftjoin   | Left join with candidate lists                                        |
+|------------+---------------+-----------------------------------------------------------------------|
+| leftjoin   | ALGleftjoin1  | Left join with candidate lists; only produce left output              |
+|------------+---------------+-----------------------------------------------------------------------|
+| outerjoin  | ALGouterjoin  | Left outer join with candidate lists                                  |
+|------------+---------------+-----------------------------------------------------------------------|
+| semijoin   | ALGsemijoin   | Semi join with candidate lists                                        |
+|------------+---------------+-----------------------------------------------------------------------|
+| thetajoin  | ALGthetajoin  | Theta join with candidate lists                                       |
+|------------+---------------+-----------------------------------------------------------------------|
+| bandjoin   | ALGbandjoin   | Band join: values in l and r match if r - c1 <[=] l <[=] r + c2       |
+|------------+---------------+-----------------------------------------------------------------------|
+| rangejoin  | ALGrangejoin  | Range join: values in l and r1/r2 match if r1 <[=] l <[=] r2          |
+|------------+---------------+-----------------------------------------------------------------------|
+| difference | ALGdifference | Difference of l and r with candidate lists                            |
+|------------+---------------+-----------------------------------------------------------------------|
+| intersect  | ALGintersect  | Intersection of l and r with candidate lists (i.e. half of semi-join) |
+|------------+---------------+-----------------------------------------------------------------------|
 
-*sort*
-ALGsort11
-ALGsort12
-ALGsort13
-ALGsort21
-ALGsort22
-ALGsort23
-ALGsort31
-ALGsort32
-ALGsort33
+** Projection operations
+#+ATTR_LATEX: :environment longtable :align |l|l|p{10cm}|
+|-----------+------------------+---------------------------------------------------------------------------------------------------------------------------------|
+| MAL       | Address          | Comment                                                                                                                         |
+|-----------+------------------+---------------------------------------------------------------------------------------------------------------------------------|
+| firstn    | ALGfirstn        | Calculate first N values of B                                                                                                   |
+|-----------+------------------+---------------------------------------------------------------------------------------------------------------------------------|
+| reuse     | ALGreuse         | Reuse a temporary BAT if you can. Otherwise, allocate enough storage to accept result of an	operation (not involving the heap) |
+|-----------+------------------+---------------------------------------------------------------------------------------------------------------------------------|
+| slice     | ALGslice\_oid    | Return the slice based on head oid x till y (exclusive).                                                                                                                                |
+|-----------+------------------+---------------------------------------------------------------------------------------------------------------------------------|
+| slice     | ALGslice         | Return the slice with the BUNs at position x till y                                                                                                                                |
+|-----------+------------------+---------------------------------------------------------------------------------------------------------------------------------|
+| slice     | ALGslice\_int    | Return the slice with the BUNs at position x till y                                                                                                                                |
+|-----------+------------------+---------------------------------------------------------------------------------------------------------------------------------|
+| slice     | ALGslice\_lng    | Return the slice with the BUNs at position x till y                                                                                                                                |
+|-----------+------------------+---------------------------------------------------------------------------------------------------------------------------------|
+| subslice  | ALGsubslice\_lng | Return the oids of the slice with the BUNs at position x till y                                                                                                                                |
+|-----------+------------------+---------------------------------------------------------------------------------------------------------------------------------|
 
-*unique*
-ALGunique2
-ALGunique1
+** Common BAT Aggregates
+These operations examine a BAT, and compute some simple aggregate result over it.
+#+ATTR_LATEX: :environment longtable :align |l|l|p{10cm}|
+|--------------+--------------------+----------------------------------------------------------------------------------------------------|
+| MAL          | Address            | Comment                                                                                            |
+|--------------+--------------------+----------------------------------------------------------------------------------------------------|
+| count        | ALGcount\_bat      | Return the current size (in number of elements) in a BAT.                                          |
+|--------------+--------------------+----------------------------------------------------------------------------------------------------|
+| count        | ALGcount\_nil      | Return the number of elements currently in a BAT ignores BUNs with nil-tail iff ignore_nils==TRUE. |
+|--------------+--------------------+----------------------------------------------------------------------------------------------------|
+| count        | ALGcountCND\_bat    | Return the current size (in number of elements) in a BAT.                                          |
+|--------------+--------------------+----------------------------------------------------------------------------------------------------|
+| count        | ALGcountCND\_nil   | Return the number of elements currently in a BAT ignores BUNs with nil-tail iff ignore_nils==TRUE. |
+|--------------+--------------------+----------------------------------------------------------------------------------------------------|
+| count_no_nil | ALGcount_no\_nil   | Return the number of elements currently	in a BAT ignoring BUNs with nil-tail                      |
+|--------------+--------------------+----------------------------------------------------------------------------------------------------|
+| count_no_nil | ALGcountCND\_no\_nil | Return the number of elements currently	in a BAT ignoring BUNs with nil-tail                      |
+|--------------+--------------------+----------------------------------------------------------------------------------------------------|
 
-**Join operations**
-*crossproduct*
-ALGcrossproduct2
+** Default Min and Max
+Implementations a generic Min and Max routines get declared first. The @emph{min()} and @emph{max()} routines below catch any tail-type.
+The type-specific routines defined later are faster, and will override these any implementations.
 
-*join*
-ALGjoin
-ALGjoin1
-
-*leftjoing*
-ALGleftjoin
-ALGleftjoin1
-
-*outerjoin*
-ALGouterjoin
-
-*semijoin*
-ALGsemijoin
-
-*thetajoin*
-ALGthetajoin
-
-*band join*
-ALGbandjoin
-
-*rangejoin*
-ALGrangejoin
-
-*difference*
-ALGdifference
-
-*intersect*
-ALGintersect
-
-**Projection operations**
-*firstn*
-ALGfirstn
-*reuse*
-ALGreuse
-# The second group uses the head to perform the range selection
-*slice*
-ALGslice_oid
-ALGslice
-ALGslice_int
-ALGslice_lng
-*subslice*
-ALGsubslice_lng
-
-**Common BAT Aggregates**
-# These operations examine a BAT, and compute some simple aggregate result
-# over it.
-*count*
-ALGcount_bat
-ALGcount_nil
-*count_no_nil*
-ALGcount_no_nil
-# the variants with a candidate list
-*count*
-ALGcountCND_bat
-ALGcountCND_nil
-*count_no_nil*
-ALGcountCND_no_nil
-
-**Default Min and Max**
-# Implementations a generic Min and Max routines get declared first. The
-# @emph{min()} and @emph{max()} routines below catch any tail-type.
-# The type-specific routines defined later are faster, and will
-# override these any implementations.
-*cardinality*
-ALGcard
-*min*
-ALGminany
-ALGminany_skipnil
-*max*
-ALGmaxany
-ALGmaxany_skipnil
+*cardinality* - ALGcard
+*min* - ALGminany, ALGminany_skipnil
+*max* - ALGmaxany, ALGmaxany_skipnil
 
 PATTERN
-*avg*
-CMDcalcavg
+*avg* - CMDcalcavg
 
-**Standard deviation**
-# The standard deviation of a set is the square root of its variance.
-# The variance is the sum of squares of the deviation of each value in the set
-# from the mean (average) value, divided by the population of the set.
-*stdeb*
-ALGstdev
-*stdevp*
-ALGstdevp
-*variance*
-ALGvariance
-*variancep*
-ALGvariancep
-*covariance*
-ALGcovariance
-*covariancep*
-ALGcovariancep
-*corr*
-ALGcorr
+** Standard deviation
+The standard deviation of a set is the square root of its variance.
+The variance is the sum of squares of the deviation of each value in the set from the mean (average) value, divided by the population of the set.
+
+*stdeb* - ALGstdev
+*stdevp* - ALGstdevp
+*variance* - ALGvariance
+*variancep* - ALGvariancep
+*covariance* - ALGcovariance
+*covariancep* - ALGcovariancep
+*corr* - ALGcorr
