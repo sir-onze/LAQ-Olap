@@ -3,7 +3,8 @@ import React from "react";
 import 'antd/dist/antd.css';
 import { Form, Input, Button, notification, Layout, List,message,Modal} from 'antd';
 import { Card, Divider,Select} from 'antd';
-
+import { UploadOutlined } from '@ant-design/icons';
+import axios from 'axios'
 
 const { Content} = Layout;
 
@@ -26,6 +27,7 @@ var editedArrow = ''
 var editedIndex = -1
 
 var visible = false
+var visible1 = false
 
 
 
@@ -62,7 +64,7 @@ function App() {
   /** Funções para lidar com o modal para editar um nodo */
   var newarrow = ''
   function showModalDelete () {
-   visible = true
+   visible1 = true
    hookemodalState(modalState.concat("show"))
   }
 
@@ -96,7 +98,7 @@ function App() {
 
    function handleCancel (e) {
     console.log(e)
-    visible = false
+    visible1 = false
     newarrow = ''
     hookemodalState(modalState.concat("ok"))
    }
@@ -127,7 +129,7 @@ function App() {
  
    function deletehandleOk (e) {
      console.log(e)
-     visible = false
+     visible1 = false
      // falta meter aqui a verificação de selecionar uma seta existente
      if(editedArrow==''){
        notification.open({
@@ -524,7 +526,6 @@ function App() {
           arrowcreateFlag = 0
           arrowdeletebutton = false
           arroweditbutton = false
-          label = ''
     }
     else {
         errorNotification()
@@ -573,6 +574,34 @@ function App() {
 
     }
 
+    function onFileChange(e){
+      console.log(e.target.files[0])
+       // enviar o pedido para a rota de update do backend
+       const formData = new FormData()
+       formData.append('json', e.target.files[0])
+       axios.post('http://localhost:3011/api/posts',formData) 
+            .then(res=>{
+              // dar update da localstorage
+              console.log("res" + JSON.stringify(res.data))
+              Object.assign(localStorage,res.data);
+              let graph_aux=[]
+              arrayTable.concat(graph_aux)
+              hookTable(arrayTable.concat(graph_aux))
+            })
+            .catch(err=>{console.log(err)})
+       console.log();
+       message.success('Importação efetuada com sucesso');
+    }
+    function exporter(e){
+      console.log(localStorage.getItem("tables"))
+      const exporta = JSON.stringify(localStorage)
+      const element = document.createElement("a");
+      const file = new Blob(  [exporta], {type: 'json;charset=utf-8'});
+      element.href = URL.createObjectURL(file);
+      element.download = "export.json";
+      document.body.appendChild(element);
+      element.click();
+    }
     /** Parte relacionada com a criação de atributos na tabela */
     var attribute_aux =[]
     var attribute_aux1 =[]
@@ -591,6 +620,271 @@ function App() {
 
   return(
       <div>
+        <table style={{width:'100%'}}>
+          <tr>
+            <th style={{width:'60%', maxWidth:'50%'}}> 
+            <table style={{width:'75%'}}>
+          
+            <tr>
+              <th style={{width:'100%',minWidth:'100%'}}>
+              <div style={{backgroundColor:'#2274A5',marginBottom:'-2vh'}}>
+                        <h1 style={{color:'white',marginLeft:'1vh'}}> Schema Editor</h1>
+                        </div>
+              <Card hoverable style={{borderColor:'#2274A5',marginTop:'1vh'}}>
+          <Form>
+              <Form.Item>
+              <Input name="table"
+                style={{width:'25vh',fontSize:'120%'}}
+                onChange={createNodeHandler} placeholder="Node name" />
+                 <Button name = "Tablebutton" onClick={createTable} disabled={createbutton} type="primary" style={{ width:'15%',marginLeft:'20%',backgroundColor:'green',borderColor:'green',fontSize:'120%'}}>Create</Button>
+                 <Button name = "Tablebutton" onClick={editTable} disabled={editbutton} type="primary" style={{ width:'15%',marginLeft:'1%',backgroundColor:'#FFC300',borderColor:'#FFC300',fontSize:'120%'}}>Edit</Button>
+                 <Button name = "Tablebutton" onClick={deleteTable} disabled={editbutton} type="primary" style={{ width:'15%',marginLeft:'1%',backgroundColor:'red',borderColor:'red',fontSize:'120%'}}>Delete</Button>
+              </Form.Item>
+          </Form>
+          <Form>
+              <Form.Item>
+                  <Input name="relation"
+                   style={{width:'25vh',fontSize:'120%'}}
+                   onChange={createNodeHandler1} placeholder="Arrow name" />
+                  <Select
+                    showSearch
+                    style={{ width: 110, marginLeft:'1%',fontSize:'120%' }}
+                    placeholder="Type"
+                    onChange={handleType}
+                   >
+                    <Option value="Measure">Measure</Option>
+                    <Option value="Dimension">Dimension</Option>
+                  </Select>
+                 <Button name = "Tablebutton" onClick={createRelation} disabled={arrowcreatebutton} type="primary" style={{ width:'29.4%',marginLeft:'3%',backgroundColor:'green',borderColor:'green',fontSize:'120%',position:'absolute',marginTop:'4%'}}>Create</Button>
+                 <Button name = "Tablebutton" onClick={showModal} disabled={arroweditbutton} type="primary" style={{ width:'29.5%',marginLeft:'34%',backgroundColor:'#FFC300',borderColor:'#FFC300',fontSize:'120%',position:'absolute',marginTop:'4%'}}>Edit</Button>
+                 <Button name = "Tablebutton" onClick={showModalDelete} disabled={ arrowdeletebutton } type="primary" style={{ width:'29.5%',marginLeft:'65%',backgroundColor:'red',borderColor:'red',fontSize:'120%',position:'absolute',marginTop:'4%'}}>Delete</Button>
+                 <Modal
+                  title="Arrow Editor"
+                  visible={visible}
+                  onOk={handleOk}
+                  onCancel={handleCancel}
+                  >
+                    <Select
+                      showSearch
+                      style={{ width: '50%',fontSize:'120%'}}
+                      placeholder="Arrow Search"
+                      onChange={handleModal}
+                    >
+                      {
+                        (arrayTable[0])!=null?
+                        arrayTable[0].edges.map((item)=>{
+                              console.log(item.label)
+                              return(
+                                <Option value={item.label}>{item.label}</Option>)
+                            })
+                        :
+                        console.log("nada")
+                      }
+                    </Select>
+                    <Input name="arrow"
+                    style={{width:'50%',fontSize:'120%'}}
+                    onChange={modalinput} placeholder="New arrow name" />
+                    </Modal>
+
+                  <Modal
+                  title="Arrow Deleter"
+                  visible={visible1}
+                  onOk={deletehandleOk}
+                  onCancel={deletehandleCancel}
+                  >
+                    <Select
+                      showSearch
+                      style={{ width: '50%',fontSize:'120%'}}
+                      placeholder="Arrow Search"
+                      onChange={deletehandleModal}
+                    >
+                      {
+                        (arrayTable[0])!=null?
+                        arrayTable[0].edges.map((item)=>{
+                              console.log(item.label)
+                              return(
+                                <Option value={item.label}>{item.label}</Option>)
+                            })
+                        :
+                        console.log("nada")
+                      }
+                    </Select>
+                    </Modal>
+                 <Select
+                    showSearch
+                    style={{ width: '50%',fontSize:'120%',position:'absolute',marginLeft:'-100%',marginTop:'12%' }}
+                    placeholder="Source node"
+                    onChange={handleSource}
+                  >
+                    {
+                      (arrayTable[0])!=null?
+                      arrayTable[0].nodes.map((item)=>{
+                            console.log(item.label)
+                            return(
+                              <Option value={item.label}>{item.label}</Option>)
+                          })
+                      :
+                      console.log("nada")
+                    }
+                </Select>
+                <Select
+                    showSearch
+                    style={{ width: '50%', marginLeft:'1%',fontSize:'120%',position:'absolute',marginLeft:'-50%',marginTop:'12%' }}
+                    placeholder="Ending node"
+                    onChange={handleDestiny}
+                  >
+                    {
+                      (arrayTable[0])!=null?
+                      arrayTable[0].nodes.map((item)=>{
+                            console.log(item.label)
+                            return(
+                              <Option value={item.label}>{item.label}</Option>)
+                          })
+                      :
+                      console.log("nada")
+                    }
+                </Select>
+              </Form.Item>
+              <Form.Item>
+              </Form.Item>
+                <Button name = "RelationClearbutton" type="primary" onClick={clearRelation} style={{width:'30%',backgroundColor:'#FFC300',borderColor:'#FFC300',fontSize:'120%'}}>Clear Selection</Button>
+                <Button name = "ClearAllbutton" type="primary" onClick={clearAll} style={{ width:'30%',backgroundColor:'red',borderColor:'red',marginLeft:'39%',fontSize:'120%'}}>Delete Schema</Button>
+                <Input
+                  type="file"
+                  name="file"
+                  //suffix= {<UploadOutlined />
+                  onChange={onFileChange}
+                  required={true}
+                  style={{
+                      width:'30%',
+                      marginTop:'5%'}}
+                      />
+                       <Button name = "ClearAllbutton" type="primary" onClick={exporter} style={{ width:'30%',backgroundColor:'#FFC300',borderColor:'#FFC300',fontSize:'120%',marginTop:'2%'}}>Export</Button>
+              <Form.Item>
+              </Form.Item>
+          </Form>
+         </Card>
+              </th>
+          </tr>
+          <tr>
+          {
+                        localStorage.getItem("from")?
+                        <div >
+                          <div style={{backgroundColor:'#2274A5',marginLeft:'0.5vh',width:'99.3%',marginBottom:'-2%'}}>
+                        <h1 style={{color:'white',marginLeft:'1vh'}}> Node Characterization</h1>
+                        </div>
+                        <Card hoverable style={{ width: '99.3%', borderColor: '#2274A5', marginLeft: '0.5vh'}}>
+                      <div>
+                          <p><b>Node</b> : { JSON.parse(localStorage.getItem("tables"))[parseInt(JSON.parse(localStorage.getItem("id")))].nodes[parseInt(localStorage.getItem("from")[1])].label}</p>
+                          <p><b>Attributes :</b></p>
+                          <List
+                              style = {{width:'15vw'}}
+                              bordered
+                              dataSource={JSON.parse(localStorage.getItem("tables"))[parseInt(JSON.parse(localStorage.getItem("id")))].nodes[parseInt(localStorage.getItem("from")[1])].attribute_aux}
+                              renderItem={item => (
+                                <List.Item>
+                                  {item}
+                                </List.Item>
+                              )}
+                          />
+                          <p><b>Primary keys</b>: No information</p>
+                          <p><b>Foreign Keys</b>: No information</p>
+                          {
+                            localStorage.getItem("measures")?
+                            <div>
+                            <p><b>Measures</b>:</p>
+                            <List
+                              style = {{width:'15vw'}}
+                              bordered
+                              dataSource={ JSON.parse(localStorage.getItem("measures")).filter( (item) => item.origin== JSON.parse(localStorage.getItem("tables"))[parseInt(JSON.parse(localStorage.getItem("id")))].nodes[parseInt(localStorage.getItem("from")[1])].label)}
+                              renderItem={item => (
+                                <List.Item>
+                                  {item.label}
+                                </List.Item>
+                              )}
+                          />
+                          </div>
+                            :
+                            <p><b>Measures</b>: No information</p>
+                          }
+                          {
+                            localStorage.getItem("dimensions")?
+                            <div>
+                                <p><b>Dimensions</b>:</p>
+                          <List
+                              style = {{width:'15vw'}}
+                              bordered
+                              dataSource={ JSON.parse(localStorage.getItem("dimensions")).filter( (item) => item.origin== JSON.parse(localStorage.getItem("tables"))[parseInt(JSON.parse(localStorage.getItem("id")))].nodes[parseInt(localStorage.getItem("from")[1])].label)}
+                              renderItem={item => (
+                                <List.Item>
+                                  {item.label}
+                                </List.Item>
+                              )}
+                          />
+                          </div>
+                          :
+                          <p><b>Dimensions</b>: No information</p>
+                          }
+                      </div>
+                      </Card>
+                      </div>
+                        :
+                        <div>
+                           <div style={{backgroundColor:'#2274A5',marginBottom:'-2vh',marginLeft:'0.2vh',width: '100%'}}>
+                        <h1 style={{color:'white',marginLeft:'1vh',zIndex:1}}> Node Characterization</h1>
+                        </div>
+                        <Card hoverable style={{ width: '100%', borderColor: '#2274A5', marginLeft: '0.2vh',minHeight:'20%'}}>
+                        <div>
+                          <p><b>Node</b> : No information</p>
+                          <p><b>Attributes</b>: No information</p>
+                          <p><b>Primary keys</b>: No information</p>
+                          <p><b>Foreign Keys</b>: No information</p>
+                          <p><b>Measures</b>: No information</p>
+                          <p><b>Dimensions</b>: No information</p>
+                      </div>
+                      </Card>
+                      </div>
+                      }
+          </tr>
+      </table>
+            </th>
+            <th style={{width:'30%', maxWidth:'100%', marginLeft:'-20%'}}>  {
+            localStorage.getItem('tables') ?
+            <Content
+            className="site-layout-background"
+            style={{
+            width:'100%',
+            height: '100%',
+            maxWidth:'100%',
+            marginTop:'-20%',
+           
+
+            overflow:'auto'
+          }}
+        >
+            <Graph graph={JSON.parse(localStorage.getItem('tables'))[JSON.parse(localStorage.getItem("id"))]} options={options} events={events} style={{ height: "540px"}} />
+        </Content>
+            : <p style={{marginLeft:'5vw',marginTop:'5vh'}}>There is no data to show </p>
+        }</th>
+          </tr>
+          </table>
+
+      </div>
+  )
+  ;
+}
+
+export default App;
+/**
+ * {
+                localStorage.getItem("from") && localStorage.getItem("to")?
+                <div></div>
+                : <p> Please select two nodes</p>
+            }
+ */
+
+ /**
+  * <div>
         <div style={{overflowY: 'scroll',display:'flex',height:'38vh'}}>
         <table style={{width:'98%',marginLeft:'2%'}}>
           
@@ -657,7 +951,7 @@ function App() {
 
                     <Modal
                     title="Arrow Deleter"
-                    visible={visible}
+                    visible={visible1}
                     onOk={deletehandleOk}
                     onCancel={deletehandleCancel}
                     >
@@ -718,6 +1012,14 @@ function App() {
                 </Form.Item>
                   <Button name = "RelationClearbutton" type="primary" onClick={clearRelation} style={{width:'30%',backgroundColor:'#FFC300',borderColor:'#FFC300',fontSize:'120%'}}>Clear Selection</Button>
                   <Button name = "ClearAllbutton" type="primary" onClick={clearAll} style={{ width:'30%',backgroundColor:'red',borderColor:'red',marginLeft:'39%',fontSize:'120%'}}>Delete Schema</Button>
+                  <Input
+                    type="file"
+                    name="file"
+                    //onChange={this.onFileChange}
+                    required={true}
+                    style={{width:'30%'}}
+                        />
+                         <Button name = "ClearAllbutton" type="primary" onClick={clearAll} style={{ width:'30%',backgroundColor:'#FFC300',borderColor:'#FFC300',marginLeft:'39%',fontSize:'120%'}}>Export</Button>
                 <Form.Item>
                 </Form.Item>
             </Form>
@@ -824,15 +1126,4 @@ function App() {
             : <p style={{marginLeft:'5vw',marginTop:'5vh'}}>There is no data to show </p>
         }
       </div>
-  )
-  ;
-}
-
-export default App;
-/**
- * {
-                localStorage.getItem("from") && localStorage.getItem("to")?
-                <div></div>
-                : <p> Please select two nodes</p>
-            }
- */
+  */
