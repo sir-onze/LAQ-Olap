@@ -1,0 +1,17 @@
+graph G {
+
+    node [shape=plaintext]
+    ALGjoin [ label = "ALGjoin" ]
+    ALGjoin1  [ label = "ALGjoin1" ]
+    project [ label = "project (l_extendedprice * l_discount)" ]
+    project1 [ label = "project (sum)" ]
+    project2 [ label = "project (revenue)" ]
+    
+    ALGjoin -- "ALGthetaselect2 (> 1995-03-15)" -- "Lineitem.l_shipdate"
+    ALGjoin --"ALGthetaselect2 (< 1995-03-15)" -- "Orders.o_orderdate"
+
+    ALGjoin1 -- "ALGthetaselect2 ( == BUILDING )" -- "Customer.c_mktsegment"
+    ALGjoin1 -- ALGjoin
+    
+    "top N (limit 10)" -- project2 -- project1 -- groupby -- project -- ALGjoin1
+}
