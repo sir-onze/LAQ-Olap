@@ -12,17 +12,15 @@ export MonetDB_source_dir=$MonetDB_base_dir/MonetDB-$MonetDB_ver
 export MonetDB_build_dir=$MonetDB_base_dir/BUILD
 export MonetDB_prefix_dir=$MonetDB_base_dir
 
-mkdir $MonetDB_base_dir
-cd $MonetDB_base_dir
+mkdir $MonetDB_base_dir;cd $MonetDB_base_dir
 
 wget http://dev.monetdb.org/downloads/sources/$MonetDB_rel/MonetDB-$MonetDB_ver.tar.xz --no-check-certificate
 
 tar xf MonetDB-$MonetDB_ver.tar.xz
 
-mkdir $MonetDB_build_dir
-cd $MonetDB_build_dir
+mkdir $MonetDB_build_dir;cd $MonetDB_build_dir
 
-$MonetDB_source_dir/configure --prefix=$MonetDB_prefix_dir --with-openssl=no --with-password-backend=no
+$MonetDB_source_dir/configure --prefix=$MonetDB_prefix_dir
 
 make -j$3
 make -j$3 install
